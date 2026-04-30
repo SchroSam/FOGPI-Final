@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Canis/Entity.hpp>
+#include <AICombat/Fighter.hpp>
 
 #include <SuperPupUtilities/StateMachine.hpp>
 
@@ -47,16 +48,15 @@ namespace AICombat
         void Exit() override;
     };
 
-    class BrawlerStateMachine : public SuperPupUtilities::StateMachine
+    class BrawlerStateMachine : public SuperPupUtilities::StateMachine, public Fighter
     {
+    protected:
+        void PlayHitSfx() override;
+        void SpawnDeathEffect() override;
+
     public:
         static constexpr const char* ScriptName = "AICombat::BrawlerStateMachine";
 
-        std::string targetTag = "";
-        float detectionRange = 20.0f;
-        Canis::Vector3 bodyColliderSize = Canis::Vector3(1.0f);
-        int maxHealth = 40;
-        bool logStateChanges = true;
         Canis::Entity* hammerVisual = nullptr;
         Canis::AudioAssetHandle hitSfxPath1 = { .path = "assets/audio/sfx/hit_1.ogg" };
         Canis::AudioAssetHandle hitSfxPath2 = { .path = "assets/audio/sfx/hit_2.ogg" };
@@ -64,6 +64,7 @@ namespace AICombat
         Canis::SceneAssetHandle deathEffectPrefab = { .path = "assets/prefabs/brawler_death_particles.scene" };
 
         explicit BrawlerStateMachine(Canis::Entity& _entity);
+        //std::string GetName() override;
 
         IdleState idleState;
         ChaseState chaseState;
@@ -74,30 +75,22 @@ namespace AICombat
         void Destroy() override;
         void Update(float _dt) override;
 
-        Canis::Entity* FindClosestTarget() const;
-        float DistanceTo(const Canis::Entity& _other) const;
-        void FaceTarget(const Canis::Entity& _target);
-        void MoveTowards(const Canis::Entity& _target, float _speed, float _dt);
-        void ChangeState(const std::string& _stateName);
-        const std::string& GetCurrentStateName() const;
-        float GetStateTime() const;
-        float GetAttackRange() const;
-        int GetCurrentHealth() const;
+        Canis::Entity* FindClosestTarget() const override;
+        float DistanceTo(const Canis::Entity& _other) const override;
+        void FaceTarget(const Canis::Entity& _target) override;
+        void MoveTowards(const Canis::Entity& _target, float _speed, float _dt) override;
+        void ChangeState(const std::string& _stateName) override;
+        const std::string& GetCurrentStateName() const override;
+        float GetStateTime() const override;
+        float GetAttackRange() const override;
+        int GetCurrentHealth() const override;
+
+        void TakeDamage(int _damage) override;
+        bool IsAlive() const override;
 
         void ResetHammerPose();
         void SetHammerSwing(float _normalized);
-        void TakeDamage(int _damage);
-        bool IsAlive() const;
 
-    private:
-        void PlayHitSfx();
-        void SpawnDeathEffect();
-
-        int m_currentHealth = 0;
-        float m_stateTime = 0.0f;
-        Canis::Vector4 m_baseColor = Canis::Vector4(1.0f);
-        bool m_hasBaseColor = false;
-        bool m_useFirstHitSfx = true;
     };
 
     void RegisterBrawlerStateMachineScript(Canis::App& _app);

@@ -110,6 +110,11 @@ namespace AICombat
         chaseState(*this),
         hammerTimeState(*this) {}
 
+    // std::string BrawlerStateMachine::GetName()
+    // {
+    //     return ScriptName;
+    // }
+
     void RegisterBrawlerStateMachineScript(Canis::App& _app)
     {
         REGISTER_PROPERTY(brawlerStateMachineConf, AICombat::BrawlerStateMachine, targetTag);

@@ -3,18 +3,14 @@
 #include <Canis/Entity.hpp>
 #include <SuperPupUtilities/StateMachine.hpp>
 
-namespace Canis
-{
-    class App;
-}
 
 namespace AICombat
 {
     class Fighter
     {
     protected:
-        virtual void PlayHitSfx();
-        virtual void SpawnDeathEffect();
+        virtual void PlayHitSfx() = 0;
+        virtual void SpawnDeathEffect() = 0;
 
         int m_currentHealth = 0;
         float m_stateTime = 0.0f;
@@ -23,7 +19,6 @@ namespace AICombat
         bool m_useFirstHitSfx = true;
 
     public:
-        static constexpr const char* ScriptName = "AICombat::Fighter";
 
         //explicit Fighter(Canis::Entity& _entity) : Canis::ScriptableEntity(_entity) {}
 
@@ -36,19 +31,19 @@ namespace AICombat
         int maxHealth = 40;
         bool logStateChanges = true;
 
-        virtual Canis::Entity* FindClosestTarget() const;
-        virtual float DistanceTo(const Canis::Entity& _other) const;
-        virtual void FaceTarget(const Canis::Entity& _target);
-        virtual void MoveTowards(const Canis::Entity& _target, float _speed, float _dt);
-        virtual void ChangeState(const std::string& _stateName);
-        virtual const std::string& GetCurrentStateName() const;
-        virtual float GetStateTime() const;
-        virtual float GetAttackRange() const;
-        virtual int GetCurrentHealth() const;
+        virtual Canis::Entity* FindClosestTarget() const = 0;
+        virtual float DistanceTo(const Canis::Entity& _other) const = 0;
+        virtual void FaceTarget(const Canis::Entity& _target) = 0;
+        virtual void MoveTowards(const Canis::Entity& _target, float _speed, float _dt) = 0;
+        virtual void ChangeState(const std::string& _stateName) = 0;
+        virtual const std::string& GetCurrentStateName() const = 0;
+        virtual float GetStateTime() const = 0;
+        virtual float GetAttackRange() const = 0;
+        virtual int GetCurrentHealth() const = 0;
 
 
-        virtual void TakeDamage(int _damage);
-        virtual bool IsAlive() const;
+        virtual void TakeDamage(int _damage) = 0;
+        virtual bool IsAlive() const = 0;
         // end old
 
         // void Create() override;
@@ -56,7 +51,4 @@ namespace AICombat
         // void Destroy() override;
         // void Update(float _dt) override;
     };
-
-    void RegisterFighterScript(Canis::App& _app);
-    void UnRegisterFighterScript(Canis::App& _app);
 }

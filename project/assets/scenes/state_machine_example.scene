@@ -145,7 +145,7 @@ Entities:
       angularDamping: 0.05
       useGravity: false
       isSensor: false
-      layer: 2
+      layer: 1
       mask: 21
       allowSleeping: false
       lockRotationX: false
@@ -225,8 +225,8 @@ Entities:
       angularDamping: 0.05
       useGravity: false
       isSensor: false
-      layer: 4
-      mask: 11
+      layer: 1
+      mask: 1
       allowSleeping: false
       lockRotationX: false
       lockRotationY: false
@@ -244,17 +244,17 @@ Entities:
       color: [0.93, 0.32, 0.3, 1]
       ModelAsset:
         uuid: 17154083321347000101
-    AICombat::BrawlerStateMachine:
+    AICombat::TankStateMachine:
       targetTag: Blue
       detectionRange: 20
       bodyColliderSize: [1, 1, 1]
-      moveSpeed: 3.4
+      moveSpeed: 4
       hammerRestDegrees: 140
       hammerSwingDegrees: -120
       attackRange: 2.2
-      attackDuration: 0.75
-      attackDamageTime: 0.24
-      maxHealth: 40
+      attackDuration: 1.5
+      attackDamageTime: 0.25
+      maxHealth: 80
       logStateChanges: true
       hammerVisual: 17922756738381035608
       hitSfxPath1:
@@ -263,7 +263,7 @@ Entities:
       hitSfxPath2:
         uuid: 15814014518013310489
         path: assets/audio/sfx/hit_2.ogg
-      hitSfxVolume: 0.1
+      hitSfxVolume: 1
       deathEffectPrefab: 1932126691914227009
   - Entity: 17922756738381035608
     Name: Right Hand Root
@@ -310,8 +310,8 @@ Entities:
       angularDamping: 0.05
       useGravity: false
       isSensor: true
-      layer: 8
-      mask: 4
+      layer: 1
+      mask: 1
       allowSleeping: false
       lockRotationX: false
       lockRotationY: false
@@ -374,8 +374,8 @@ Entities:
       angularDamping: 0.05
       useGravity: false
       isSensor: true
-      layer: 16
-      mask: 2
+      layer: 1
+      mask: 1
       allowSleeping: false
       lockRotationX: false
       lockRotationY: false

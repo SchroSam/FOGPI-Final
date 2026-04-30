@@ -1,9 +1,10 @@
 #include <AICombat/HammerDamage.hpp>
 
-#include <AICombat/BrawlerStateMachine.hpp>
+#include <AICombat/Fighter.hpp>
 
 #include <Canis/App.hpp>
 #include <Canis/ConfigHelper.hpp>
+#include <Canis/Debug.hpp>
 
 #include <algorithm>
 
@@ -57,7 +58,7 @@ namespace AICombat
 
         if (targetTag.empty())
         {
-            if (BrawlerStateMachine* ownerStateMachine = GetOwnerStateMachine())
+            if (Fighter* ownerStateMachine = GetOwnerStateMachine())
                 targetTag = ownerStateMachine->targetTag;
         }
     }
@@ -69,10 +70,12 @@ namespace AICombat
 
     void HammerDamage::CheckSensorEnter()
     {
+        // Canis::Debug::Log("Collision check 1");
+
         if (!entity.HasComponents<Canis::BoxCollider, Canis::Rigidbody>())
             return;
 
-        BrawlerStateMachine* ownerStateMachine = GetOwnerStateMachine();
+        Fighter* ownerStateMachine = GetOwnerStateMachine();
         if (ownerStateMachine == nullptr || !ownerStateMachine->IsAlive())
         {
             m_hitTargetsThisSwing.clear();
@@ -80,8 +83,8 @@ namespace AICombat
         }
 
         const bool damageWindowOpen =
-            ownerStateMachine->GetCurrentStateName() == HammerTimeState::Name &&
-            ownerStateMachine->GetStateTime() >= ownerStateMachine->hammerTimeState.attackDamageTime;
+            ownerStateMachine->GetCurrentStateName() == ownerStateMachine->GetAttackStateName() &&
+            ownerStateMachine->GetStateTime() >= ownerStateMachine->GetAttackDamageTime();
 
         if (!damageWindowOpen)
         {
@@ -94,19 +97,20 @@ namespace AICombat
             if (other == nullptr || !other->active || other == owner || HasDamagedThisSwing(*other))
                 continue;
 
-            BrawlerStateMachine* targetStateMachine = other->GetScript<BrawlerStateMachine>();
+            Fighter* targetStateMachine = other->GetScript<Fighter>();
             if (targetStateMachine == nullptr || !targetStateMachine->IsAlive())
                 continue;
 
             if (other->tag != targetTag)
                 continue;
 
+            Canis::Debug::Log("%s made a hit", entity.name);
             targetStateMachine->TakeDamage(damage);
             m_hitTargetsThisSwing.push_back(other);
         }
     }
 
-    BrawlerStateMachine* HammerDamage::GetOwnerStateMachine()
+    Fighter* HammerDamage::GetOwnerStateMachine()
     {
         if (owner == nullptr)
             owner = FindOwnerFromHierarchy();
@@ -114,7 +118,7 @@ namespace AICombat
         if (owner == nullptr || !owner->active)
             return nullptr;
 
-        return owner->GetScript<BrawlerStateMachine>();
+        return owner->GetScript<Fighter>();
     }
 
     Canis::Entity* HammerDamage::FindOwnerFromHierarchy() const
@@ -125,7 +129,7 @@ namespace AICombat
         Canis::Entity* current = entity.GetComponent<Canis::Transform>().parent;
         while (current != nullptr)
         {
-            if (current->HasScript<BrawlerStateMachine>())
+            if (current->HasScript<Fighter>())
                 return current;
 
             if (!current->HasComponent<Canis::Transform>())

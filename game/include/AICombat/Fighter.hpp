@@ -1,12 +1,13 @@
 #pragma once
 #include <string>
+#include <string_view>
 #include <Canis/Entity.hpp>
 #include <SuperPupUtilities/StateMachine.hpp>
 
 
 namespace AICombat
 {
-    class Fighter
+    class Fighter : public SuperPupUtilities::StateMachine
     {
     protected:
         virtual void PlayHitSfx() = 0;
@@ -19,10 +20,7 @@ namespace AICombat
         bool m_useFirstHitSfx = true;
 
     public:
-
-        //explicit Fighter(Canis::Entity& _entity) : Canis::ScriptableEntity(_entity) {}
-
-        //OLD
+        explicit Fighter(Canis::Entity& _entity);
         virtual ~Fighter() = default;
 
         std::string targetTag = "";
@@ -30,6 +28,10 @@ namespace AICombat
         Canis::Vector3 bodyColliderSize = Canis::Vector3(1.0f);
         int maxHealth = 40;
         bool logStateChanges = true;
+        Canis::SceneAssetHandle deathEffectPrefab = { .path = "assets/prefabs/brawler_death_particles.scene" };
+        Canis::AudioAssetHandle hitSfxPath1 = { .path = "assets/audio/sfx/hit_1.ogg" };
+        Canis::AudioAssetHandle hitSfxPath2 = { .path = "assets/audio/sfx/hit_2.ogg" };
+        float hitSfxVolume = 1.0f;
 
         virtual Canis::Entity* FindClosestTarget() const = 0;
         virtual float DistanceTo(const Canis::Entity& _other) const = 0;
@@ -40,7 +42,8 @@ namespace AICombat
         virtual float GetStateTime() const = 0;
         virtual float GetAttackRange() const = 0;
         virtual int GetCurrentHealth() const = 0;
-
+        virtual std::string_view GetAttackStateName() const = 0;
+        virtual float GetAttackDamageTime() const = 0;
 
         virtual void TakeDamage(int _damage) = 0;
         virtual bool IsAlive() const = 0;
@@ -51,4 +54,6 @@ namespace AICombat
         // void Destroy() override;
         // void Update(float _dt) override;
     };
+
+    inline Fighter::Fighter(Canis::Entity& _entity) : SuperPupUtilities::StateMachine(_entity) {}
 }

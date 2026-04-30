@@ -8,7 +8,7 @@ musicVolume: 1
 sfxVolume: 1
 mute: false
 editor: true
-syncMode: 0
+syncMode: 1
 iconUUID: 8708093225096235882
 launchScene: 11030618039459198727
 editorWindowWidth: 1920

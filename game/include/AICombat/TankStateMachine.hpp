@@ -3,65 +3,70 @@
 #include <Canis/Entity.hpp>
 #include <AICombat/Fighter.hpp>
 #include <SuperPupUtilities/StateMachine.hpp>
-
 #include <string>
+
+namespace Canis
+{
+    class App;
+}
 
 namespace AICombat
 {
-    class BrawlerStateMachine;
+    class TankStateMachine;
 
-    class IdleState : public SuperPupUtilities::State
+    class TankIdleState : public SuperPupUtilities::State
     {
     public:
         static constexpr const char* Name = "IdleState";
 
-        explicit IdleState(SuperPupUtilities::StateMachine& _stateMachine);
+        explicit TankIdleState(SuperPupUtilities::StateMachine& _stateMachine);
         void Enter() override;
         void Update(float _dt) override;
     };
 
-    class ChaseState : public SuperPupUtilities::State
+    class TankChaseState : public SuperPupUtilities::State
     {
     public:
         static constexpr const char* Name = "ChaseState";
         float moveSpeed = 4.0f;
 
-        explicit ChaseState(SuperPupUtilities::StateMachine& _stateMachine);
+        explicit TankChaseState(SuperPupUtilities::StateMachine& _stateMachine);
         void Enter() override;
         void Update(float _dt) override;
     };
 
-    class HammerTimeState : public SuperPupUtilities::State
+    class TankHammerTimeState : public SuperPupUtilities::State
     {
     public:
-        static constexpr const char* Name = "HammerTimeState";
+        static constexpr const char* Name = "TankHammerTimeState";
         float hammerRestDegrees = 140.0f;
         float hammerSwingDegrees = -120.0f;
         float attackRange = 2.25f;
-        float attackDuration = 0.75f;
+        float attackDuration = 1.5f;
         float attackDamageTime = 0.25f;
 
-        explicit HammerTimeState(SuperPupUtilities::StateMachine& _stateMachine);
+        explicit TankHammerTimeState(SuperPupUtilities::StateMachine& _stateMachine);
         void Enter() override;
         void Update(float _dt) override;
         void Exit() override;
     };
 
-    class BrawlerStateMachine : public Fighter
+    class TankStateMachine : public Fighter
     {
     public:
-        static constexpr const char* ScriptName = "AICombat::BrawlerStateMachine";
+        static constexpr const char* ScriptName = "AICombat::TankStateMachine";
 
         Canis::Entity* hammerVisual = nullptr;
+        Canis::AudioAssetHandle hitSfxPath1 = { .path = "assets/audio/sfx/hit_1.ogg" };
+        Canis::AudioAssetHandle hitSfxPath2 = { .path = "assets/audio/sfx/hit_2.ogg" };
+        float hitSfxVolume = 1.0f;
+        Canis::SceneAssetHandle deathEffectPrefab = { .path = "assets/prefabs/brawler_death_particles.scene" };
 
-        IdleState idleState;
-        ChaseState chaseState;
-        HammerTimeState hammerTimeState;
+        explicit TankStateMachine(Canis::Entity& _entity);
 
-        void SpawnDeathEffect() override;
-        void PlayHitSfx() override;
-
-        explicit BrawlerStateMachine(Canis::Entity& _entity);
+        TankIdleState idleState;
+        TankChaseState chaseState;
+        TankHammerTimeState hammerTimeState;
 
         void Create() override;
         void Ready() override;
@@ -80,14 +85,17 @@ namespace AICombat
         std::string_view GetAttackStateName() const override;
         float GetAttackDamageTime() const override;
 
-        void TakeDamage(int _damage) override;
-        bool IsAlive() const override;
-
         void ResetHammerPose();
         void SetHammerSwing(float _normalized);
 
+        void TakeDamage(int _damage) override;
+        bool IsAlive() const override;
+
+    private:
+        void PlayHitSfx() override;
+        void SpawnDeathEffect() override;
     };
 
-    void RegisterBrawlerStateMachineScript(Canis::App& _app);
-    void UnRegisterBrawlerStateMachineScript(Canis::App& _app);
+    void RegisterTankStateMachineScript(Canis::App& _app);
+    void UnRegisterTankStateMachineScript(Canis::App& _app);
 }

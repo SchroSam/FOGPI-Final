@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Canis/Entity.hpp>
+#include <AICombat/Fighter.hpp>
 
 #include <vector>
 
@@ -27,7 +28,7 @@ namespace AICombat
         void CheckSensorEnter();
 
     private:
-        BrawlerStateMachine* GetOwnerStateMachine();
+        Fighter* GetOwnerStateMachine();
         Canis::Entity* FindOwnerFromHierarchy() const;
         bool HasDamagedThisSwing(Canis::Entity& _target) const;
 

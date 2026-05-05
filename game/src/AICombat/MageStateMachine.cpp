@@ -94,7 +94,8 @@ namespace AICombat
 
         attackStartTimer += _dt;
 
-        mageStatMachine->staffVisual->GetComponent<PointLight>().intensity += (_dt * 10.0f); // 0.5 * 10 = intensity 5
+        if (mageStatMachine->staffVisual != nullptr && mageStatMachine->staffVisual->HasComponent<PointLight>())
+            mageStatMachine->staffVisual->GetComponent<PointLight>().intensity += (_dt * 10.0f); // 0.5 * 10 = intensity 5
 
         if(attackStartTimer >= mageStatMachine->attackStartDelay)
         {
@@ -102,7 +103,8 @@ namespace AICombat
 
             // reset back to nothing;
             attackStartTimer = 0.0f;
-            mageStatMachine->staffVisual->GetComponent<PointLight>().intensity = 0.0f;
+            if (mageStatMachine->staffVisual != nullptr && mageStatMachine->staffVisual->HasComponent<PointLight>())
+                mageStatMachine->staffVisual->GetComponent<PointLight>().intensity = 0.0f;
         }
 
         // END MAGE SPECIFIC
@@ -110,10 +112,14 @@ namespace AICombat
         if (mageStatMachine->GetStateTime() < duration)
             return;
 
-        if(glm::distance(mageStatMachine->FindClosestTarget()->GetComponent<Transform>().position, mageStatMachine->entity.GetComponent<Transform>().position) <= attackRange)
-            return;
+        Canis::Entity* closestTarget = mageStatMachine->FindClosestTarget();
+        if (closestTarget != nullptr && mageStatMachine->entity.HasComponent<Canis::Transform>() && closestTarget->HasComponent<Canis::Transform>())
+        {
+            if (glm::distance(closestTarget->GetComponent<Transform>().position, mageStatMachine->entity.GetComponent<Transform>().position) <= attackRange)
+                return;
+        }
 
-        if (mageStatMachine->FindClosestTarget() != nullptr)
+        if (closestTarget != nullptr)
             mageStatMachine->ChangeState(MageChaseState::Name);
         else
             mageStatMachine->ChangeState(MageIdleState::Name);
@@ -124,8 +130,8 @@ namespace AICombat
         MageStateMachine* mageStatMachine = dynamic_cast<MageStateMachine*>(m_stateMachine);
 
         attackStartTimer = 0.0f;
-        mageStatMachine->staffVisual->GetComponent<PointLight>().intensity = 0.0f;
-
+        if (mageStatMachine != nullptr && mageStatMachine->staffVisual != nullptr && mageStatMachine->staffVisual->HasComponent<PointLight>())
+            mageStatMachine->staffVisual->GetComponent<PointLight>().intensity = 0.0f;
     }
 
     MageStateMachine::MageStateMachine(Canis::Entity& _entity) :

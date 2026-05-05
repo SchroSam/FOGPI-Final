@@ -80,71 +80,69 @@ namespace AICombat
         if (healerStatMachine == nullptr)
             return;
 
-        Canis::Entity* target;
-
-        if (target = healerStatMachine->FindClosestTarget())
+        Canis::Entity* target = healerStatMachine->FindClosestTarget();
+        if (target != nullptr)
             healerStatMachine->FaceTarget(*target);
 
         const float duration = std::max(attackDuration, 0.001f);
 
         // Healer SPECIFIC LOGIC
 
-        if(!healStarted)
+        if (!healStarted)
         {
-
             healStartTimer += _dt;
 
-            healerStatMachine->staffVisual->GetComponent<PointLight>().intensity += (_dt * 10.0f); // 0.5 * 10 = intensity 5
+            if (healerStatMachine->staffVisual != nullptr && healerStatMachine->staffVisual->HasComponent<PointLight>())
+                healerStatMachine->staffVisual->GetComponent<PointLight>().intensity += (_dt * 10.0f); // 0.5 * 10 = intensity 5
 
-            if(healStartTimer >= healerStatMachine->healStartDelay)
+            if (healStartTimer >= healerStatMachine->healStartDelay)
             {
-                // HEALING LOGIC HERE
-
                 healStarted = true;
-
-
-                // healerStatMachine->ShootEm();
-
-                // reset back to nothing;
-                // healStartTimer = 0.0f;
-                // healerStatMachine->staffVisual->GetComponent<PointLight>().intensity = 0.0f;
+                healerStatMachine->healTarget = target;
             }
-
         }
 
-        if(healStarted)
+        if (healStarted)
         {
-            if(!target->active || !target->GetScript<Fighter>() || !target->GetScript<Fighter>()->IsAlive())
+            if (target == nullptr)
             {
+                healerStatMachine->healTarget = nullptr;
+                healStarted = false;
+                return;
+            }
+
+            Fighter* fighter = target ? target->GetScript<Fighter>() : nullptr;
+
+            if (!target->active || fighter == nullptr || !fighter->IsAlive())
+            {
+                healerStatMachine->healTarget = nullptr;
                 healStarted = false;
                 return;
             }
 
             healTimer += _dt;
 
-            if(healTimer >= 1.0f)
+            if (healTimer >= 1.0f)
             {
                 healTimer = 0.0f;
-                if (Fighter* fighter = target->GetScript<Fighter>())
-                {
-                    fighter->m_currentHealth += healAmount;
-                }
+                fighter->m_currentHealth += healAmount;
                 Canis::Debug::Log("I healed him chief!");
             }
-
-            
         }
 
         if (healerStatMachine->GetStateTime() < duration)
             return;
 
-        if(glm::distance(healerStatMachine->FindClosestTarget()->GetComponent<Transform>().position, healerStatMachine->entity.GetComponent<Transform>().position) <= attackRange)
-            return;
-
-        if(!healStarted)
+        Canis::Entity* closestTarget = healerStatMachine->FindClosestTarget();
+        if (closestTarget != nullptr && healerStatMachine->entity.HasComponent<Canis::Transform>() && closestTarget->HasComponent<Canis::Transform>())
         {
+            if (glm::distance(closestTarget->GetComponent<Transform>().position, healerStatMachine->entity.GetComponent<Transform>().position) <= attackRange)
+                return;
+        }
 
-            if (healerStatMachine->FindClosestTarget() != nullptr)
+        if (!healStarted)
+        {
+            if (closestTarget != nullptr)
                 healerStatMachine->ChangeState(HealerChaseState::Name);
             else
                 healerStatMachine->ChangeState(HealerIdleState::Name);
@@ -154,10 +152,15 @@ namespace AICombat
     void HealerHealState::Exit()
     {
         HealerStateMachine* healerStatMachine = dynamic_cast<HealerStateMachine*>(m_stateMachine);
-
         healStartTimer = 0.0f;
-        healerStatMachine->staffVisual->GetComponent<PointLight>().intensity = 0.0f;
 
+        if (healerStatMachine != nullptr)
+        {
+            healerStatMachine->healTarget = nullptr;
+
+            if (healerStatMachine->staffVisual != nullptr && healerStatMachine->staffVisual->HasComponent<PointLight>())
+                healerStatMachine->staffVisual->GetComponent<PointLight>().intensity = 0.0f;
+        }
     }
 
     HealerStateMachine::HealerStateMachine(Canis::Entity& _entity) :
@@ -174,6 +177,7 @@ namespace AICombat
     void RegisterHealerStateMachineScript(Canis::App& _app)
     {
         REGISTER_PROPERTY(healerStateMachine, AICombat::HealerStateMachine, targetTag);
+        REGISTER_PROPERTY(healerStateMachine, AICombat::HealerStateMachine, healTarget);
         REGISTER_PROPERTY(healerStateMachine, AICombat::HealerStateMachine, detectionRange);
         REGISTER_PROPERTY(healerStateMachine, AICombat::HealerStateMachine, bodyColliderSize);
         RegisterAccessorProperty(healerStateMachine, AICombat::HealerStateMachine, chaseState, moveSpeed);
@@ -296,6 +300,25 @@ namespace AICombat
                 const float distance = glm::distance(origin, candidatePosition);
 
                 if (distance > detectionRange || other->m_currentHealth >= lowestHealth)
+                    continue;
+
+                bool alreadyHealing = false;
+                for(auto* thing : entity.scene.GetEntities())
+                {
+                    if (thing == nullptr)
+                        continue;
+
+                    if (HealerStateMachine* healer = thing->GetScript<HealerStateMachine>())
+                    {
+                        if (healer->healTarget == candidate)
+                        {
+                            alreadyHealing = true;
+                            break;
+                        }
+                    }
+                }
+
+                if(alreadyHealing)
                     continue;
 
                 lowestHealth = other->m_currentHealth;

@@ -63,6 +63,7 @@ namespace AICombat
         float hitSfxVolume = 1.0f;
         float healStartDelay = 0.5f;
         Canis::SceneAssetHandle deathEffectPrefab = { .path = "assets/prefabs/brawler_death_particles.scene" };
+        Canis::Entity* healTarget = nullptr;
 
         explicit HealerStateMachine(Canis::Entity& _entity);
 

@@ -112,6 +112,9 @@ namespace AICombat
         if (mageStatMachine->GetStateTime() < duration)
             return;
 
+        if(glm::distance(mageStatMachine->FindClosestTarget()->GetComponent<Transform>().position, mageStatMachine->entity.GetComponent<Transform>().position) <= attackRange)
+            return;
+
         if (mageStatMachine->FindClosestTarget() != nullptr)
             mageStatMachine->ChangeState(MageChaseState::Name);
         else
@@ -365,7 +368,7 @@ namespace AICombat
         staffVisual->GetComponent<PointLight>().intensity = 1.0f;
     }
 
-    void MageStateMachine::ShootEm() 
+    void MageStateMachine::ShootEm() // ChootEm! ChootEm!
     {
         if (bulletPrefab.Empty() || !entity.HasComponent<Canis::Transform>())
             return;

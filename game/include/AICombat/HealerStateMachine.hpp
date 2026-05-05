@@ -27,7 +27,7 @@ namespace AICombat
     {
     public:
         static constexpr const char* Name = "ChaseState";
-        float moveSpeed = 3.0f;
+        float moveSpeed = 4.0f;
 
         explicit HealerChaseState(SuperPupUtilities::StateMachine& _stateMachine);
         void Enter() override;
@@ -38,7 +38,7 @@ namespace AICombat
     {
     public:
         static constexpr const char* Name = "HealerHealState";
-        float attackRange = 10.0f;
+        float attackRange = 5.0f;
         float attackDuration = 1.5f;
         float attackDamageTime = 0.25f;
         float healStartTimer = 0.5f;

@@ -440,10 +440,11 @@ Entities:
         uuid: 17154083321347000101
     AICombat::HealerStateMachine:
       targetTag: Red
+      healTarget: 0
       detectionRange: 20
       bodyColliderSize: [1, 1, 1]
-      moveSpeed: 3
-      attackRange: 10
+      moveSpeed: 4
+      attackRange: 5
       attackDuration: 1.5
       attackDamageTime: 0.25
       healTimer: 0
@@ -581,7 +582,7 @@ Entities:
       detectionRange: 20
       bodyColliderSize: [1, 1, 1]
       moveSpeed: 2
-      attackRange: 2.25
+      attackRange: 8
       attackDuration: 1.5
       attackDamageTime: 0.25
       maxHealth: 40

@@ -213,7 +213,6 @@ namespace AICombat
         // else
         //     bulletPrefab = {.path = "assets/prefabs/mage_bullet_red.scene"};
 
-        mageAttackState.attackRange = 15.0f;
         m_currentHealth = std::max(maxHealth, 1);
         m_stateTime = 0.0f;
         m_useFirstHitSfx = true;

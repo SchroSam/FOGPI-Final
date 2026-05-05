@@ -104,19 +104,29 @@ namespace AICombat
 
         if (healStarted)
         {
-            if (target == nullptr)
+            if (healerStatMachine->healTarget == nullptr || !healerStatMachine->healTarget->active)
             {
+                Canis::Debug::Log("Reset early 1 !");
                 healerStatMachine->healTarget = nullptr;
                 healStarted = false;
+                if (healerStatMachine->staffVisual != nullptr && healerStatMachine->staffVisual->HasComponent<PointLight>())
+                    healerStatMachine->staffVisual->GetComponent<PointLight>().intensity = 0.0f;
+                healStartTimer = 0.0f;
+
                 return;
             }
 
-            Fighter* fighter = target ? target->GetScript<Fighter>() : nullptr;
+            Fighter* fighter = healerStatMachine->healTarget ? healerStatMachine->healTarget->GetScript<Fighter>() : nullptr;
 
-            if (!target->active || fighter == nullptr || !fighter->IsAlive())
+            if (fighter == nullptr || !fighter->IsAlive())
             {
+                Canis::Debug::Log("Reset early 2: %d", fighter ? fighter->m_currentHealth : 0);
                 healerStatMachine->healTarget = nullptr;
                 healStarted = false;
+                if (healerStatMachine->staffVisual != nullptr && healerStatMachine->staffVisual->HasComponent<PointLight>())
+                    healerStatMachine->staffVisual->GetComponent<PointLight>().intensity = 0.0f;
+                healStartTimer = 0.0f;
+
                 return;
             }
 
@@ -126,7 +136,7 @@ namespace AICombat
             {
                 healTimer = 0.0f;
                 fighter->m_currentHealth += healAmount;
-                Canis::Debug::Log("I healed him chief!");
+                Canis::Debug::Log("I healed him chief: %d", fighter->m_currentHealth);
             }
         }
 
@@ -244,7 +254,6 @@ namespace AICombat
         // else
         //     bulletPrefab = {.path = "assets/prefabs/mage_bullet_red.scene"};
 
-        healerHealState.attackRange = 15.0f;
         m_currentHealth = std::max(maxHealth, 1);
         m_stateTime = 0.0f;
         m_useFirstHitSfx = true;

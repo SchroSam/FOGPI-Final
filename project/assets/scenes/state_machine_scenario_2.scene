@@ -1,0 +1,952 @@
+Environment:
+  ClearColor: [0.08, 0.1, 0.14, 1]
+  SkyboxAsset:
+    uuid: 9041318343503679699
+  PostProcessAsset:
+    uuid: 1651863902076402666
+Entities:
+  - Entity: 920001
+    Name: Camera
+    Tag: MainCamera
+    Canis::Transform:
+      active: true
+      position: [0, 8, 13]
+      rotation: [-0.52, 0, 0]
+      scale: [1, 1, 1]
+      parent: 0
+      children:
+        []
+    Canis::Camera:
+      primary: true
+      fovDegrees: 60
+      nearClip: 0.1
+      farClip: 300
+  - Entity: 920002
+    Name: Sun
+    Tag: ""
+    Canis::DirectionalLight:
+      enabled: true
+      color: [1, 0.97, 0.92, 1]
+      intensity: 4
+      direction: [-0.4, -1, -0.25]
+  - Entity: 920010
+    Name: Ground
+    Tag: ""
+    Canis::Transform:
+      active: true
+      position: [0, -0.5, 0]
+      rotation: [0, 0, 0]
+      scale: [18, 1, 18]
+      parent: 0
+      children:
+        []
+    Canis::Material:
+      color: [0.24, 0.28, 0.34, 1]
+      MaterialAsset:
+        uuid: 17490362529814420531
+    Canis::Model:
+      color: [0.24, 0.28, 0.34, 1]
+      ModelAsset:
+        uuid: 17154083321347000101
+  - Entity: 920011
+    Name: Wall_North
+    Tag: ""
+    Canis::Transform:
+      active: true
+      position: [0, 1, -9]
+      rotation: [0, 0, 0]
+      scale: [18, 2, 0.5]
+      parent: 0
+      children:
+        []
+    Canis::Material:
+      color: [0.16, 0.18, 0.23, 1]
+      MaterialAsset:
+        uuid: 17490362529814420531
+    Canis::Model:
+      color: [0.16, 0.18, 0.23, 1]
+      ModelAsset:
+        uuid: 17154083321347000101
+  - Entity: 920012
+    Name: Wall_South
+    Tag: ""
+    Canis::Transform:
+      active: true
+      position: [0, 1, 9]
+      rotation: [0, 0, 0]
+      scale: [18, 2, 0.5]
+      parent: 0
+      children:
+        []
+    Canis::Material:
+      color: [0.16, 0.18, 0.23, 1]
+      MaterialAsset:
+        uuid: 17490362529814420531
+    Canis::Model:
+      color: [0.16, 0.18, 0.23, 1]
+      ModelAsset:
+        uuid: 17154083321347000101
+  - Entity: 920013
+    Name: Wall_West
+    Tag: ""
+    Canis::Transform:
+      active: true
+      position: [-9, 1, 0]
+      rotation: [0, 0, 0]
+      scale: [0.5, 2, 18]
+      parent: 0
+      children:
+        []
+    Canis::Material:
+      color: [0.16, 0.18, 0.23, 1]
+      MaterialAsset:
+        uuid: 17490362529814420531
+    Canis::Model:
+      color: [0.16, 0.18, 0.23, 1]
+      ModelAsset:
+        uuid: 17154083321347000101
+  - Entity: 920014
+    Name: Wall_East
+    Tag: ""
+    Canis::Transform:
+      active: true
+      position: [9, 1, 0]
+      rotation: [0, 0, 0]
+      scale: [0.5, 2, 18]
+      parent: 0
+      children:
+        []
+    Canis::Material:
+      color: [0.16, 0.18, 0.23, 1]
+      MaterialAsset:
+        uuid: 17490362529814420531
+    Canis::Model:
+      color: [0.16, 0.18, 0.23, 1]
+      ModelAsset:
+        uuid: 17154083321347000101
+  - Entity: 920100
+    Name: Blue Brawler
+    Tag: Blue
+    Canis::Transform:
+      active: true
+      position: [-4.5038013, 1, -0.34812403]
+      rotation: [0, -0, 0]
+      scale: [1, 1, 1]
+      parent: 0
+      children:
+        - 11979571633178964622
+    Canis::Rigidbody:
+      active: true
+      motionType: 1
+      mass: 1
+      friction: 0.2
+      restitution: 0
+      linearDamping: 0.05
+      angularDamping: 0.05
+      useGravity: false
+      isSensor: false
+      layer: 1
+      mask: 21
+      allowSleeping: false
+      lockRotationX: false
+      lockRotationY: false
+      lockRotationZ: false
+      linearVelocity: [0, 0, 0]
+      angularVelocity: [0, 0, 0]
+    Canis::BoxCollider:
+      active: true
+      size: [1, 1, 1]
+    Canis::Material:
+      color: [0.24, 0.58, 0.98, 1]
+      MaterialAsset:
+        uuid: 17490362529814420531
+    Canis::Model:
+      color: [0.24, 0.58, 0.98, 1]
+      ModelAsset:
+        uuid: 17154083321347000101
+    AICombat::BrawlerStateMachine:
+      targetTag: Red
+      detectionRange: 20
+      bodyColliderSize: [1, 1, 1]
+      moveSpeed: 3.4
+      hammerRestDegrees: 140
+      hammerSwingDegrees: -120
+      attackRange: 2.2
+      attackDuration: 0.75
+      attackDamageTime: 0.24
+      maxHealth: 40
+      logStateChanges: true
+      hammerVisual: 11979571633178964622
+      hitSfxPath1:
+        uuid: 9101673412543458587
+        path: assets/audio/sfx/hit_1.ogg
+      hitSfxPath2:
+        uuid: 15814014518013310489
+        path: assets/audio/sfx/hit_2.ogg
+      hitSfxVolume: 0.1
+      deathEffectPrefab: 1932126691914227009
+  - Entity: 920101
+    Name: Blue Hammer Handle
+    Tag: ""
+    Canis::Transform:
+      active: true
+      position: [0, 0, -0.48331738]
+      rotation: [0, -0, 0]
+      scale: [0.24999192, 0.24999996, 1.1000001]
+      parent: 11979571633178964622
+      children:
+        []
+    Canis::Material:
+      color: [0.78, 0.9, 1, 1]
+      MaterialAsset:
+        uuid: 17490362529814420531
+    Canis::Model:
+      color: [0.78, 0.9, 1, 1]
+      ModelAsset:
+        uuid: 17154083321347000101
+  - Entity: 920110
+    Name: Red Tank
+    Tag: Red
+    Canis::Transform:
+      active: true
+      position: [2.8321848, 1.000137, -0.15642667]
+      rotation: [-3.1415908, -8.742277e-08, -3.1415908]
+      scale: [1, 1, 1]
+      parent: 0
+      children:
+        - 17922756738381035608
+    Canis::Rigidbody:
+      active: true
+      motionType: 1
+      mass: 1
+      friction: 0.2
+      restitution: 0
+      linearDamping: 0.05
+      angularDamping: 0.05
+      useGravity: false
+      isSensor: false
+      layer: 1
+      mask: 1
+      allowSleeping: false
+      lockRotationX: false
+      lockRotationY: false
+      lockRotationZ: false
+      linearVelocity: [0, 0, 0]
+      angularVelocity: [0, 0, 0]
+    Canis::BoxCollider:
+      active: true
+      size: [1, 1, 1]
+    Canis::Material:
+      color: [0.93, 0.32, 0.3, 1]
+      MaterialAsset:
+        uuid: 17490362529814420531
+    Canis::Model:
+      color: [0.93, 0.32, 0.3, 1]
+      ModelAsset:
+        uuid: 17154083321347000101
+    AICombat::TankStateMachine:
+      targetTag: Blue
+      detectionRange: 20
+      bodyColliderSize: [1, 1, 1]
+      moveSpeed: 4
+      hammerRestDegrees: 140
+      hammerSwingDegrees: -120
+      attackRange: 2.2
+      attackDuration: 1.5
+      attackDamageTime: 0.25
+      maxHealth: 80
+      logStateChanges: true
+      hammerVisual: 17922756738381035608
+      hitSfxPath1:
+        uuid: 9101673412543458587
+        path: assets/audio/sfx/hit_1.ogg
+      hitSfxPath2:
+        uuid: 15814014518013310489
+        path: assets/audio/sfx/hit_2.ogg
+      hitSfxVolume: 1
+      deathEffectPrefab: 1932126691914227009
+  - Entity: 17922756738381035608
+    Name: Right Hand Root
+    Tag: ""
+    Canis::Transform:
+      active: true
+      position: [0.731, 0.18722522, 6.354746e-07]
+      rotation: [1.5707964, 0, 0]
+      scale: [1, 1, 1]
+      parent: 920110
+      children:
+        - 8246503215484870094
+        - 12545027224714017549
+  - Entity: 11979571633178964622
+    Name: Right Hand Root
+    Tag: ""
+    Canis::Transform:
+      active: true
+      position: [0.7310178, 0.18722522, 0]
+      rotation: [1.5707964, -0, 0]
+      scale: [1, 1, 1]
+      parent: 920100
+      children:
+        - 920101
+        - 16852824116669955566
+  - Entity: 16852824116669955566
+    Name: Blue Hammer Head
+    Tag: ""
+    Canis::Transform:
+      active: true
+      position: [0, -1.4210855e-14, -1.4746836]
+      rotation: [0, -0, 0]
+      scale: [0.99995285, 1, 1]
+      parent: 11979571633178964622
+      children:
+        []
+    Canis::Rigidbody:
+      active: true
+      motionType: 0
+      mass: 1
+      friction: 0.2
+      restitution: 0
+      linearDamping: 0.05
+      angularDamping: 0.05
+      useGravity: false
+      isSensor: true
+      layer: 1
+      mask: 1
+      allowSleeping: false
+      lockRotationX: false
+      lockRotationY: false
+      lockRotationZ: false
+      linearVelocity: [0, 0, 0]
+      angularVelocity: [0, 0, 0]
+    Canis::BoxCollider:
+      active: true
+      size: [1, 1, 1]
+    Canis::Material:
+      color: [1, 1, 1, 1]
+      MaterialAsset:
+        uuid: 17490362529814420531
+    Canis::Model:
+      color: [1, 1, 1, 1]
+      ModelAsset:
+        uuid: 17154083321347000101
+    AICombat::HammerDamage:
+      owner: 0
+      sensorSize: [1, 1, 1]
+      damage: 10
+      targetTag: Red
+  - Entity: 12545027224714017549
+    Name: Red Hammer Handle
+    Tag: ""
+    Canis::Transform:
+      active: true
+      position: [0, -4.2252964e-08, -0.48331738]
+      rotation: [0, 0, 0]
+      scale: [0.24999192, 0.24999996, 1.1000001]
+      parent: 17922756738381035608
+      children:
+        []
+    Canis::Material:
+      color: [0.78, 0.9, 1, 1]
+      MaterialAsset:
+        uuid: 17490362529814420531
+    Canis::Model:
+      color: [0.78, 0.9, 1, 1]
+      ModelAsset:
+        uuid: 17154083321347000101
+  - Entity: 8246503215484870094
+    Name: Red Hammer Head
+    Tag: ""
+    Canis::Transform:
+      active: true
+      position: [0, -1.4210855e-14, -1.4746836]
+      rotation: [0, -0, 0]
+      scale: [0.99995285, 1, 1]
+      parent: 17922756738381035608
+      children:
+        []
+    Canis::Rigidbody:
+      active: true
+      motionType: 0
+      mass: 1
+      friction: 0.2
+      restitution: 0
+      linearDamping: 0.05
+      angularDamping: 0.05
+      useGravity: false
+      isSensor: true
+      layer: 1
+      mask: 1
+      allowSleeping: false
+      lockRotationX: false
+      lockRotationY: false
+      lockRotationZ: false
+      linearVelocity: [0, 0, 0]
+      angularVelocity: [0, 0, 0]
+    Canis::BoxCollider:
+      active: true
+      size: [1, 1, 1]
+    Canis::Material:
+      color: [0.1891892, 0.1891892, 0.1891892, 1]
+      MaterialAsset:
+        uuid: 17490362529814420531
+    Canis::Model:
+      color: [1, 1, 1, 1]
+      ModelAsset:
+        uuid: 17154083321347000101
+    AICombat::HammerDamage:
+      owner: 0
+      sensorSize: [1, 1, 1]
+      damage: 10
+      targetTag: Blue
+  - Entity: 5218509262529328616
+    Name: Red Healer
+    Tag: Red
+    Canis::Transform:
+      active: true
+      position: [4.956303, 1.0000538, 3.879342]
+      rotation: [0, -0.09875261, 0]
+      scale: [0.99999386, 1, 0.99999386]
+      parent: 0
+      children:
+        - 15882665552837415823
+    Canis::Rigidbody:
+      active: true
+      motionType: 1
+      mass: 1
+      friction: 0.2
+      restitution: 0
+      linearDamping: 0.05
+      angularDamping: 0.05
+      useGravity: false
+      isSensor: false
+      layer: 1
+      mask: 21
+      allowSleeping: false
+      lockRotationX: false
+      lockRotationY: false
+      lockRotationZ: false
+      linearVelocity: [0, 0, 0]
+      angularVelocity: [0, 0, 0]
+    Canis::BoxCollider:
+      active: true
+      size: [1, 1, 1]
+    Canis::Material:
+      color: [1, 0, 0, 1]
+      MaterialAsset:
+        uuid: 17490362529814420531
+    Canis::Model:
+      color: [1, 1, 1, 1]
+      ModelAsset:
+        uuid: 17154083321347000101
+    AICombat::HealerStateMachine:
+      targetTag: Red
+      healTarget: 0
+      detectionRange: 20
+      bodyColliderSize: [1, 1, 1]
+      moveSpeed: 4
+      attackRange: 5
+      attackDuration: 1.5
+      attackDamageTime: 0.25
+      healTimer: 0
+      healStarted: false
+      maxHealth: 40
+      logStateChanges: true
+      staffVisual: 8532050747544124908
+      hitSfxPath1:
+        uuid: 9101673412543458587
+        path: assets/audio/sfx/hit_1.ogg
+      hitSfxPath2:
+        uuid: 15814014518013310489
+        path: assets/audio/sfx/hit_2.ogg
+      hitSfxVolume: 1
+      healStartDelay: 0.5
+      deathEffectPrefab: 1932126691914227009
+  - Entity: 15882665552837415823
+    Name: Right Hand Root
+    Tag: ""
+    Canis::Transform:
+      active: true
+      position: [0.7310178, 0.18722522, 0]
+      rotation: [1.5707964, -0, 0]
+      scale: [1, 1, 1]
+      parent: 5218509262529328616
+      children:
+        - 4675233186412311603
+        - 8532050747544124908
+  - Entity: 4675233186412311603
+    Name: Red Staff Handle
+    Tag: ""
+    Canis::Transform:
+      active: true
+      position: [0, 0, -0.48331738]
+      rotation: [0, -0, 0]
+      scale: [0.24999192, 0.24999996, 1.1000001]
+      parent: 15882665552837415823
+      children:
+        []
+    Canis::Material:
+      color: [0.78, 0.9, 1, 1]
+      MaterialAsset:
+        uuid: 17490362529814420531
+    Canis::Model:
+      color: [0.78, 0.9, 1, 1]
+      ModelAsset:
+        uuid: 17154083321347000101
+  - Entity: 8532050747544124908
+    Name: Red Staff Head
+    Tag: ""
+    Canis::Transform:
+      active: true
+      position: [0, -5.004921e-08, -1.1449975]
+      rotation: [0, 0, -3.2887491e-16]
+      scale: [0.3799808, 0.37979093, 0.3802069]
+      parent: 15882665552837415823
+      children:
+        []
+    Canis::Rigidbody:
+      active: true
+      motionType: 0
+      mass: 1
+      friction: 0.2
+      restitution: 0
+      linearDamping: 0.05
+      angularDamping: 0.05
+      useGravity: false
+      isSensor: true
+      layer: 1
+      mask: 1
+      allowSleeping: false
+      lockRotationX: false
+      lockRotationY: false
+      lockRotationZ: false
+      linearVelocity: [0, 0, 0]
+      angularVelocity: [0, 0, 0]
+    Canis::BoxCollider:
+      active: true
+      size: [1, 1, 1]
+    Canis::PointLight:
+      enabled: true
+      color: [0.2162162, 1, 0, 1]
+      intensity: 0
+      range: 12
+    Canis::Material:
+      color: [0.23938227, 1, 0, 1]
+      MaterialAsset:
+        uuid: 17490362529814420531
+    Canis::Model:
+      color: [1, 1, 1, 1]
+      ModelAsset:
+        uuid: 17154083321347000101
+  - Entity: 12205901662421028739
+    Name: Red Mage
+    Tag: Red
+    Canis::Transform:
+      active: true
+      position: [3.5883794, 1.0001162, 6.582367]
+      rotation: [0, -0.09875261, 0]
+      scale: [0.99999386, 1, 0.99999386]
+      parent: 0
+      children:
+        - 4482163460736680751
+    Canis::Rigidbody:
+      active: true
+      motionType: 1
+      mass: 1
+      friction: 0.2
+      restitution: 0
+      linearDamping: 0.05
+      angularDamping: 0.05
+      useGravity: false
+      isSensor: false
+      layer: 1
+      mask: 21
+      allowSleeping: false
+      lockRotationX: false
+      lockRotationY: false
+      lockRotationZ: false
+      linearVelocity: [0, 0, 0]
+      angularVelocity: [0, 0, 0]
+    Canis::BoxCollider:
+      active: true
+      size: [1, 1, 1]
+    Canis::Material:
+      color: [1, 0.03125, 0, 1]
+      MaterialAsset:
+        uuid: 17490362529814420531
+    Canis::Model:
+      color: [1, 1, 1, 1]
+      ModelAsset:
+        uuid: 17154083321347000101
+    AICombat::MageStateMachine:
+      targetTag: Blue
+      detectionRange: 20
+      bodyColliderSize: [1, 1, 1]
+      moveSpeed: 2
+      attackRange: 8
+      attackDuration: 1.5
+      attackDamageTime: 0.25
+      maxHealth: 40
+      logStateChanges: true
+      staffVisual: 8568406092555523288
+      hitSfxPath1:
+        uuid: 9101673412543458587
+        path: assets/audio/sfx/hit_1.ogg
+      hitSfxPath2:
+        uuid: 15814014518013310489
+        path: assets/audio/sfx/hit_2.ogg
+      hitSfxVolume: 1
+      attackStartDelay: 0.5
+      deathEffectPrefab: 1932126691914227009
+      bulletPrefab: 7484489211504740795
+  - Entity: 4482163460736680751
+    Name: Right Hand Root
+    Tag: ""
+    Canis::Transform:
+      active: true
+      position: [0.7310178, 0.18722522, 0]
+      rotation: [1.5707964, -0, 0]
+      scale: [1, 1, 1]
+      parent: 12205901662421028739
+      children:
+        - 6104794969488956111
+        - 8568406092555523288
+  - Entity: 6104794969488956111
+    Name: Red Staff Handle
+    Tag: ""
+    Canis::Transform:
+      active: true
+      position: [0, 0, -0.48331738]
+      rotation: [0, -0, 0]
+      scale: [0.24999192, 0.24999996, 1.1000001]
+      parent: 4482163460736680751
+      children:
+        []
+    Canis::Material:
+      color: [0.78, 0.9, 1, 1]
+      MaterialAsset:
+        uuid: 17490362529814420531
+    Canis::Model:
+      color: [0.78, 0.9, 1, 1]
+      ModelAsset:
+        uuid: 17154083321347000101
+  - Entity: 8568406092555523288
+    Name: Red Staff Head
+    Tag: ""
+    Canis::Transform:
+      active: true
+      position: [0, -5.004921e-08, -1.1449975]
+      rotation: [0, 0, -3.2887491e-16]
+      scale: [0.3799808, 0.37979093, 0.3802069]
+      parent: 4482163460736680751
+      children:
+        []
+    Canis::Rigidbody:
+      active: true
+      motionType: 0
+      mass: 1
+      friction: 0.2
+      restitution: 0
+      linearDamping: 0.05
+      angularDamping: 0.05
+      useGravity: false
+      isSensor: true
+      layer: 1
+      mask: 1
+      allowSleeping: false
+      lockRotationX: false
+      lockRotationY: false
+      lockRotationZ: false
+      linearVelocity: [0, 0, 0]
+      angularVelocity: [0, 0, 0]
+    Canis::BoxCollider:
+      active: true
+      size: [1, 1, 1]
+    Canis::PointLight:
+      enabled: true
+      color: [1, 0.23137255, 0, 1]
+      intensity: 0
+      range: 12
+    Canis::Material:
+      color: [1, 0.23166025, 0, 1]
+      MaterialAsset:
+        uuid: 17490362529814420531
+    Canis::Model:
+      color: [1, 1, 1, 1]
+      ModelAsset:
+        uuid: 17154083321347000101
+  - Entity: 11031805207871786219
+    Name: Blue Healer
+    Tag: Blue
+    Canis::Transform:
+      active: true
+      position: [-4.9451666, 1.0000557, 2.7581258]
+      rotation: [0, -0.09875261, 0]
+      scale: [0.99999386, 1, 0.99999386]
+      parent: 0
+      children:
+        - 5337123602529287557
+    Canis::Rigidbody:
+      active: true
+      motionType: 1
+      mass: 1
+      friction: 0.2
+      restitution: 0
+      linearDamping: 0.05
+      angularDamping: 0.05
+      useGravity: false
+      isSensor: false
+      layer: 1
+      mask: 21
+      allowSleeping: false
+      lockRotationX: false
+      lockRotationY: false
+      lockRotationZ: false
+      linearVelocity: [0, 0, 0]
+      angularVelocity: [0, 0, 0]
+    Canis::BoxCollider:
+      active: true
+      size: [1, 1, 1]
+    Canis::Material:
+      color: [0.23921569, 0.5803922, 0.98039216, 1]
+      MaterialAsset:
+        uuid: 17490362529814420531
+    Canis::Model:
+      color: [0.23921569, 0.5803922, 0.98039216, 1]
+      ModelAsset:
+        uuid: 17154083321347000101
+    AICombat::HealerStateMachine:
+      targetTag: Red
+      healTarget: 0
+      detectionRange: 20
+      bodyColliderSize: [1, 1, 1]
+      moveSpeed: 4
+      attackRange: 5
+      attackDuration: 1.5
+      attackDamageTime: 0.25
+      healTimer: 0
+      healStarted: false
+      maxHealth: 40
+      logStateChanges: true
+      staffVisual: 14094234601899967327
+      hitSfxPath1:
+        uuid: 9101673412543458587
+        path: assets/audio/sfx/hit_1.ogg
+      hitSfxPath2:
+        uuid: 15814014518013310489
+        path: assets/audio/sfx/hit_2.ogg
+      hitSfxVolume: 1
+      healStartDelay: 0.5
+      deathEffectPrefab: 1932126691914227009
+  - Entity: 5337123602529287557
+    Name: Right Hand Root
+    Tag: ""
+    Canis::Transform:
+      active: true
+      position: [0.7310178, 0.18722522, 0]
+      rotation: [1.5707964, -0, 0]
+      scale: [1, 1, 1]
+      parent: 11031805207871786219
+      children:
+        - 17074951885518964287
+        - 14094234601899967327
+  - Entity: 17074951885518964287
+    Name: Blue Staff Handle
+    Tag: ""
+    Canis::Transform:
+      active: true
+      position: [0, 0, -0.48331738]
+      rotation: [0, -0, 0]
+      scale: [0.24999192, 0.24999996, 1.1000001]
+      parent: 5337123602529287557
+      children:
+        []
+    Canis::Material:
+      color: [0.78, 0.9, 1, 1]
+      MaterialAsset:
+        uuid: 17490362529814420531
+    Canis::Model:
+      color: [0.78, 0.9, 1, 1]
+      ModelAsset:
+        uuid: 17154083321347000101
+  - Entity: 14094234601899967327
+    Name: Blue Staff Head
+    Tag: ""
+    Canis::Transform:
+      active: true
+      position: [0, -5.004921e-08, -1.1449975]
+      rotation: [0, 0, -3.2887491e-16]
+      scale: [0.3799808, 0.37979093, 0.3802069]
+      parent: 5337123602529287557
+      children:
+        []
+    Canis::Rigidbody:
+      active: true
+      motionType: 0
+      mass: 1
+      friction: 0.2
+      restitution: 0
+      linearDamping: 0.05
+      angularDamping: 0.05
+      useGravity: false
+      isSensor: true
+      layer: 1
+      mask: 1
+      allowSleeping: false
+      lockRotationX: false
+      lockRotationY: false
+      lockRotationZ: false
+      linearVelocity: [0, 0, 0]
+      angularVelocity: [0, 0, 0]
+    Canis::BoxCollider:
+      active: true
+      size: [1, 1, 1]
+    Canis::PointLight:
+      enabled: true
+      color: [0.2162162, 1, 0, 1]
+      intensity: 0
+      range: 12
+    Canis::Material:
+      color: [0.23938227, 1, 0, 1]
+      MaterialAsset:
+        uuid: 17490362529814420531
+    Canis::Model:
+      color: [1, 1, 1, 1]
+      ModelAsset:
+        uuid: 17154083321347000101
+  - Entity: 13964907067636397058
+    Name: Blue Mage
+    Tag: Blue
+    Canis::Transform:
+      active: true
+      position: [-4.383645, 1.0001156, 5.47992]
+      rotation: [0, -0.0987526, 0]
+      scale: [0.9999956, 1, 0.9999956]
+      parent: 0
+      children:
+        - 13835871462278955950
+    Canis::Rigidbody:
+      active: true
+      motionType: 1
+      mass: 1
+      friction: 0.2
+      restitution: 0
+      linearDamping: 0.05
+      angularDamping: 0.05
+      useGravity: false
+      isSensor: false
+      layer: 1
+      mask: 21
+      allowSleeping: false
+      lockRotationX: false
+      lockRotationY: false
+      lockRotationZ: false
+      linearVelocity: [0, 0, 0]
+      angularVelocity: [0, 0, 0]
+    Canis::BoxCollider:
+      active: true
+      size: [1, 1, 1]
+    Canis::Material:
+      color: [0.24, 0.58, 0.98, 1]
+      MaterialAsset:
+        uuid: 17490362529814420531
+    Canis::Model:
+      color: [0.24, 0.58, 0.98, 1]
+      ModelAsset:
+        uuid: 17154083321347000101
+    AICombat::MageStateMachine:
+      targetTag: Red
+      detectionRange: 20
+      bodyColliderSize: [1, 1, 1]
+      moveSpeed: 2
+      attackRange: 8
+      attackDuration: 1.5
+      attackDamageTime: 0.25
+      maxHealth: 40
+      logStateChanges: true
+      staffVisual: 18362150226566519562
+      hitSfxPath1:
+        uuid: 9101673412543458587
+        path: assets/audio/sfx/hit_1.ogg
+      hitSfxPath2:
+        uuid: 15814014518013310489
+        path: assets/audio/sfx/hit_2.ogg
+      hitSfxVolume: 1
+      attackStartDelay: 0.5
+      deathEffectPrefab: 1932126691914227009
+      bulletPrefab: 15859375282125958522
+  - Entity: 13835871462278955950
+    Name: Right Hand Root
+    Tag: ""
+    Canis::Transform:
+      active: true
+      position: [0.7310178, 0.18722522, 0]
+      rotation: [1.5707964, -0, 0]
+      scale: [1, 1, 1]
+      parent: 13964907067636397058
+      children:
+        - 10969411252732527921
+        - 18362150226566519562
+  - Entity: 10969411252732527921
+    Name: Blue Staff Handle
+    Tag: ""
+    Canis::Transform:
+      active: true
+      position: [0, 0, -0.48331738]
+      rotation: [0, -0, 0]
+      scale: [0.24999192, 0.24999996, 1.1000001]
+      parent: 13835871462278955950
+      children:
+        []
+    Canis::Material:
+      color: [0.78, 0.9, 1, 1]
+      MaterialAsset:
+        uuid: 17490362529814420531
+    Canis::Model:
+      color: [0.78, 0.9, 1, 1]
+      ModelAsset:
+        uuid: 17154083321347000101
+  - Entity: 18362150226566519562
+    Name: Blue Staff Head
+    Tag: ""
+    Canis::Transform:
+      active: true
+      position: [0, -5.004921e-08, -1.1449975]
+      rotation: [0, 0, -3.2887491e-16]
+      scale: [0.3799808, 0.37979093, 0.3802069]
+      parent: 13835871462278955950
+      children:
+        []
+    Canis::Rigidbody:
+      active: true
+      motionType: 0
+      mass: 1
+      friction: 0.2
+      restitution: 0
+      linearDamping: 0.05
+      angularDamping: 0.05
+      useGravity: false
+      isSensor: true
+      layer: 1
+      mask: 1
+      allowSleeping: false
+      lockRotationX: false
+      lockRotationY: false
+      lockRotationZ: false
+      linearVelocity: [0, 0, 0]
+      angularVelocity: [0, 0, 0]
+    Canis::BoxCollider:
+      active: true
+      size: [1, 1, 1]
+    Canis::PointLight:
+      enabled: true
+      color: [1, 0.23137255, 0, 1]
+      intensity: 0
+      range: 12
+    Canis::Material:
+      color: [1, 0.23166025, 0, 1]
+      MaterialAsset:
+        uuid: 17490362529814420531
+    Canis::Model:
+      color: [1, 1, 1, 1]
+      ModelAsset:
+        uuid: 17154083321347000101

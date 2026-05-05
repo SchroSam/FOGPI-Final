@@ -46,14 +46,13 @@ namespace AICombat
         if (hit.entity == nullptr || hit.entity == &entity)
             return;
 
-        if (IsValidTarget(*hit.entity) && hitImpulse > 0.0f && hit.entity->HasComponent<Canis::Rigidbody>())
+        if (IsValidTarget(*hit.entity) && hit.entity->HasComponent<Canis::Rigidbody>())
         {
-            hit.entity->GetComponent<Canis::Rigidbody>().AddForce(
-                direction * hitImpulse,
-                Canis::Rigidbody3DForceMode::IMPULSE);
+            //DAMAGE
+            entity.Destroy();
         }
 
-        entity.Destroy();
+        
     }
 
     void MageBullet::Move(float _dt)
@@ -70,7 +69,10 @@ namespace AICombat
 
     void MageBullet::Create() {}
 
-    void MageBullet::Ready() {}
+    void MageBullet::Ready() 
+    {
+        m_timeRemaining = 5.0f;
+    }
 
     void MageBullet::Destroy() {}
 

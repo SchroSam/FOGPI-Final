@@ -206,6 +206,7 @@ namespace AICombat
         // else
         //     bulletPrefab = {.path = "assets/prefabs/mage_bullet_red.scene"};
 
+        mageAttackState.attackRange = 15.0f;
         m_currentHealth = std::max(maxHealth, 1);
         m_stateTime = 0.0f;
         m_useFirstHitSfx = true;
@@ -369,7 +370,7 @@ namespace AICombat
         if (bulletPrefab.Empty() || !entity.HasComponent<Canis::Transform>())
             return;
 
-        const Canis::Transform& sourceTransform = staffVisual->GetComponent<Canis::Transform>();
+        const Canis::Transform& sourceTransform = entity.GetComponent<Canis::Transform>();
         const Canis::Vector3 spawnPosition = sourceTransform.GetGlobalPosition();
         const Canis::Vector3 spawnRotation = sourceTransform.GetGlobalRotation();
 

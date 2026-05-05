@@ -16,10 +16,10 @@ namespace AICombat
         static constexpr const char* ScriptName = "AICombat::MageBullet";
 
         int damage = 1;
-        float speed = 20.0f;
+        float speed = 2.0f;
         float lifeTime = 10.0f;
         float gravity = 0.0f;
-        float hitImpulse = 1.0f;
+        float hitImpulse = 0.0f;
         Canis::Mask collisionMask = Canis::Rigidbody::DefaultMask;
         std::string targetTag = "";
 

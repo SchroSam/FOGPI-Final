@@ -2,7 +2,7 @@ Environment:
   ClearColor: [0.09, 0.12, 0.17, 1]
 Entities:
   - Entity: 920001
-    Name: LaserTagBullet
+    Name: MageBulletBlue
     Tag: Projectile
     Canis::Transform:
       active: true
@@ -12,11 +12,6 @@ Entities:
       parent: 0
       children:
         []
-    Canis::PointLight:
-      enabled: true
-      color: [0.8803987, 0.122846335, 0.122846335, 1]
-      intensity: 15
-      range: 12
     Canis::Material:
       color: [0, 0.20077229, 1, 1]
       MaterialAsset:

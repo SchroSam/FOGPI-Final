@@ -438,6 +438,28 @@ Entities:
       color: [1, 1, 1, 1]
       ModelAsset:
         uuid: 17154083321347000101
+    AICombat::HealerStateMachine:
+      targetTag: Red
+      detectionRange: 20
+      bodyColliderSize: [1, 1, 1]
+      moveSpeed: 3
+      attackRange: 10
+      attackDuration: 1.5
+      attackDamageTime: 0.25
+      healTimer: 0
+      healStarted: false
+      maxHealth: 40
+      logStateChanges: true
+      staffVisual: 8532050747544124908
+      hitSfxPath1:
+        uuid: 9101673412543458587
+        path: assets/audio/sfx/hit_1.ogg
+      hitSfxPath2:
+        uuid: 15814014518013310489
+        path: assets/audio/sfx/hit_2.ogg
+      hitSfxVolume: 1
+      healStartDelay: 0.5
+      deathEffectPrefab: 1932126691914227009
   - Entity: 15882665552837415823
     Name: Right Hand Root
     Tag: ""
@@ -503,7 +525,7 @@ Entities:
       size: [1, 1, 1]
     Canis::PointLight:
       enabled: true
-      color: [1, 0.23137255, 0, 1]
+      color: [0.2162162, 1, 0, 1]
       intensity: 0
       range: 12
     Canis::Material:

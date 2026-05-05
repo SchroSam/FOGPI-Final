@@ -42,7 +42,9 @@ namespace AICombat
         float attackDuration = 1.5f;
         float attackDamageTime = 0.25f;
         float healStartTimer = 0.5f;
+        float healTimer = 0.0f;
         int healAmount = 2;
+        bool healStarted = false;
 
         explicit HealerHealState(SuperPupUtilities::StateMachine& _stateMachine);
         void Enter() override;
@@ -59,9 +61,8 @@ namespace AICombat
         Canis::AudioAssetHandle hitSfxPath1 = { .path = "assets/audio/sfx/hit_1.ogg" };
         Canis::AudioAssetHandle hitSfxPath2 = { .path = "assets/audio/sfx/hit_2.ogg" };
         float hitSfxVolume = 1.0f;
-        float attackStartDelay = 0.5f;
+        float healStartDelay = 0.5f;
         Canis::SceneAssetHandle deathEffectPrefab = { .path = "assets/prefabs/brawler_death_particles.scene" };
-        Canis::SceneAssetHandle bulletPrefab;
 
         explicit HealerStateMachine(Canis::Entity& _entity);
 

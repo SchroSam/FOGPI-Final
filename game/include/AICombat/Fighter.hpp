@@ -13,7 +13,7 @@ namespace AICombat
         virtual void PlayHitSfx() = 0;
         virtual void SpawnDeathEffect() = 0;
 
-        int m_currentHealth = 0;
+        
         float m_stateTime = 0.0f;
         Canis::Vector4 m_baseColor = Canis::Vector4(1.0f);
         bool m_hasBaseColor = false;
@@ -23,6 +23,7 @@ namespace AICombat
         explicit Fighter(Canis::Entity& _entity);
         virtual ~Fighter() = default;
 
+        int m_currentHealth = 0;
         std::string targetTag = "";
         float detectionRange = 20.0f;
         Canis::Vector3 bodyColliderSize = Canis::Vector3(1.0f);

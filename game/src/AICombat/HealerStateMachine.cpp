@@ -19,11 +19,7 @@ namespace AICombat
     HealerIdleState::HealerIdleState(SuperPupUtilities::StateMachine& _stateMachine) :
         State(Name, _stateMachine) {}
 
-    void HealerIdleState::Enter()
-    {
-
-
-    }
+    void HealerIdleState::Enter() {}
 
     void HealerIdleState::Update(float)
     {
@@ -84,29 +80,60 @@ namespace AICombat
         if (healerStatMachine == nullptr)
             return;
 
-        if (Canis::Entity* target = healerStatMachine->FindClosestTarget())
+        Canis::Entity* target;
+
+        if (target = healerStatMachine->FindClosestTarget())
             healerStatMachine->FaceTarget(*target);
 
         const float duration = std::max(attackDuration, 0.001f);
 
-        // MAGE SPECIFIC LOGIC
+        // Healer SPECIFIC LOGIC
 
-        healStartTimer += _dt;
-
-        healerStatMachine->staffVisual->GetComponent<PointLight>().intensity += (_dt * 10.0f); // 0.5 * 10 = intensity 5
-
-        if(healStartTimer >= healerStatMachine->attackStartDelay)
+        if(!healStarted)
         {
-            // HEALING LOGIC HERE
 
-            // healerStatMachine->ShootEm();
+            healStartTimer += _dt;
 
-            // reset back to nothing;
-            healStartTimer = 0.0f;
-            healerStatMachine->staffVisual->GetComponent<PointLight>().intensity = 0.0f;
+            healerStatMachine->staffVisual->GetComponent<PointLight>().intensity += (_dt * 10.0f); // 0.5 * 10 = intensity 5
+
+            if(healStartTimer >= healerStatMachine->healStartDelay)
+            {
+                // HEALING LOGIC HERE
+
+                healStarted = true;
+
+
+                // healerStatMachine->ShootEm();
+
+                // reset back to nothing;
+                // healStartTimer = 0.0f;
+                // healerStatMachine->staffVisual->GetComponent<PointLight>().intensity = 0.0f;
+            }
+
         }
 
-        // END MAGE SPECIFIC
+        if(healStarted)
+        {
+            if(!target->active || !target->GetScript<Fighter>() || !target->GetScript<Fighter>()->IsAlive())
+            {
+                healStarted = false;
+                return;
+            }
+
+            healTimer += _dt;
+
+            if(healTimer >= 1.0f)
+            {
+                healTimer = 0.0f;
+                if (Fighter* fighter = target->GetScript<Fighter>())
+                {
+                    fighter->m_currentHealth += healAmount;
+                }
+                Canis::Debug::Log("I healed him chief!");
+            }
+
+            
+        }
 
         if (healerStatMachine->GetStateTime() < duration)
             return;
@@ -114,10 +141,14 @@ namespace AICombat
         if(glm::distance(healerStatMachine->FindClosestTarget()->GetComponent<Transform>().position, healerStatMachine->entity.GetComponent<Transform>().position) <= attackRange)
             return;
 
-        if (healerStatMachine->FindClosestTarget() != nullptr)
-            healerStatMachine->ChangeState(HealerChaseState::Name);
-        else
-            healerStatMachine->ChangeState(HealerIdleState::Name);
+        if(!healStarted)
+        {
+
+            if (healerStatMachine->FindClosestTarget() != nullptr)
+                healerStatMachine->ChangeState(HealerChaseState::Name);
+            else
+                healerStatMachine->ChangeState(HealerIdleState::Name);
+        }
     }
 
     void HealerHealState::Exit()
@@ -149,15 +180,16 @@ namespace AICombat
         RegisterAccessorProperty(healerStateMachine, AICombat::HealerStateMachine, healerHealState, attackRange);
         RegisterAccessorProperty(healerStateMachine, AICombat::HealerStateMachine, healerHealState, attackDuration);
         RegisterAccessorProperty(healerStateMachine, AICombat::HealerStateMachine, healerHealState, attackDamageTime);
+        RegisterAccessorProperty(healerStateMachine, AICombat::HealerStateMachine, healerHealState, healTimer);
+        RegisterAccessorProperty(healerStateMachine, AICombat::HealerStateMachine, healerHealState, healStarted);
         REGISTER_PROPERTY(healerStateMachine, AICombat::HealerStateMachine, maxHealth);
         REGISTER_PROPERTY(healerStateMachine, AICombat::HealerStateMachine, logStateChanges);
         REGISTER_PROPERTY(healerStateMachine, AICombat::HealerStateMachine, staffVisual);
         REGISTER_PROPERTY(healerStateMachine, AICombat::HealerStateMachine, hitSfxPath1);
         REGISTER_PROPERTY(healerStateMachine, AICombat::HealerStateMachine, hitSfxPath2);
         REGISTER_PROPERTY(healerStateMachine, AICombat::HealerStateMachine, hitSfxVolume);
-        REGISTER_PROPERTY(healerStateMachine, AICombat::HealerStateMachine, attackStartDelay);
+        REGISTER_PROPERTY(healerStateMachine, AICombat::HealerStateMachine, healStartDelay);
         REGISTER_PROPERTY(healerStateMachine, AICombat::HealerStateMachine, deathEffectPrefab);
-        REGISTER_PROPERTY(healerStateMachine, AICombat::HealerStateMachine, bulletPrefab);
 
         DEFAULT_CONFIG_AND_REQUIRED(
             healerStateMachine,
@@ -239,15 +271,15 @@ namespace AICombat
 
     Canis::Entity* HealerStateMachine::FindClosestTarget() const
     {
-        if (targetTag.empty() || !entity.HasComponent<Canis::Transform>())
+        if (entity.tag.empty() || !entity.HasComponent<Canis::Transform>())
             return nullptr;
 
         const Canis::Transform& transform = entity.GetComponent<Canis::Transform>();
         const Canis::Vector3 origin = transform.GetGlobalPosition();
-        Canis::Entity* closestTarget = nullptr;
-        float closestDistance = detectionRange;
+        Canis::Entity* lowestTarget = nullptr;
+        int lowestHealth = INT_MAX;
 
-        for (Canis::Entity* candidate : entity.scene.GetEntitiesWithTag(targetTag))
+        for (Canis::Entity* candidate : entity.scene.GetEntitiesWithTag(entity.tag))
         {
             if (candidate == nullptr || candidate == &entity || !candidate->active)
                 continue;
@@ -255,23 +287,23 @@ namespace AICombat
             if (!candidate->HasComponent<Canis::Transform>())
                 continue;
 
-            if (const HealerStateMachine* other = candidate->GetScript<HealerStateMachine>())
+            if (const Fighter* other = candidate->GetScript<Fighter>())
             {
                 if (!other->IsAlive())
                     continue;
+
+                const Canis::Vector3 candidatePosition = candidate->GetComponent<Canis::Transform>().GetGlobalPosition();
+                const float distance = glm::distance(origin, candidatePosition);
+
+                if (distance > detectionRange || other->m_currentHealth >= lowestHealth)
+                    continue;
+
+                lowestHealth = other->m_currentHealth;
+                lowestTarget = candidate;
             }
-
-            const Canis::Vector3 candidatePosition = candidate->GetComponent<Canis::Transform>().GetGlobalPosition();
-            const float distance = glm::distance(origin, candidatePosition);
-
-            if (distance > detectionRange || distance >= closestDistance)
-                continue;
-
-            closestDistance = distance;
-            closestTarget = candidate;
         }
 
-        return closestTarget;
+        return lowestTarget;
     }
 
     float HealerStateMachine::DistanceTo(const Canis::Entity& _other) const

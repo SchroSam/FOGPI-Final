@@ -28,7 +28,7 @@ namespace AICombat
     {
     public:
         static constexpr const char* Name = "ChaseState";
-        float moveSpeed = 4.0f;
+        float moveSpeed = 2.0f;
 
         explicit TankChaseState(SuperPupUtilities::StateMachine& _stateMachine);
         void Enter() override;

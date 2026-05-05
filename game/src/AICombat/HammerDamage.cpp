@@ -1,6 +1,7 @@
 #include <AICombat/HammerDamage.hpp>
 
 #include <AICombat/Fighter.hpp>
+#include <AICombat/TankStateMachine.hpp>
 
 #include <Canis/App.hpp>
 #include <Canis/ConfigHelper.hpp>
@@ -58,8 +59,12 @@ namespace AICombat
 
         if (targetTag.empty())
         {
-            if (Fighter* ownerStateMachine = GetOwnerStateMachine())
+            if (Fighter* ownerStateMachine = GetOwnerStateMachine()){
                 targetTag = ownerStateMachine->targetTag;
+                if(ownerStateMachine->entity.HasComponent<TankStateMachine>()){
+                    damage *= 1.3;
+                }
+            }
         }
     }
 

@@ -181,6 +181,7 @@ namespace AICombat
         m_currentHealth = std::max(maxHealth, 1);
         m_stateTime = 0.0f;
         m_useFirstHitSfx = true;
+        
 
         ClearStates();
         AddState(idleState);

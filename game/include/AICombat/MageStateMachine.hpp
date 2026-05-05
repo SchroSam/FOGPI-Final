@@ -39,11 +39,10 @@ namespace AICombat
     {
     public:
         static constexpr const char* Name = "MageAttackState";
-        float hammerRestDegrees = 140.0f;
-        float hammerSwingDegrees = -120.0f;
-        float attackRange = 2.25f;
+        float attackRange = 6.0f;
         float attackDuration = 1.5f;
         float attackDamageTime = 0.25f;
+        float attackStartTimer = 0.5f;
 
         explicit MageAttackState(SuperPupUtilities::StateMachine& _stateMachine);
         void Enter() override;
@@ -60,7 +59,9 @@ namespace AICombat
         Canis::AudioAssetHandle hitSfxPath1 = { .path = "assets/audio/sfx/hit_1.ogg" };
         Canis::AudioAssetHandle hitSfxPath2 = { .path = "assets/audio/sfx/hit_2.ogg" };
         float hitSfxVolume = 1.0f;
+        float attackStartDelay = 0.5f;
         Canis::SceneAssetHandle deathEffectPrefab = { .path = "assets/prefabs/brawler_death_particles.scene" };
+        Canis::SceneAssetHandle bulletPrefab = {.path = "assets/prefabs/laser_tag_bullet.scene"};
 
         explicit MageStateMachine(Canis::Entity& _entity);
 
@@ -85,7 +86,8 @@ namespace AICombat
         std::string_view GetAttackStateName() const override;
         float GetAttackDamageTime() const override;
 
-        // void ResetHammerPose();
+        void StartStaffGlow();
+        void ShootEm();
         // void SetHammerSwing(float _normalized);
 
         void TakeDamage(int _damage) override;

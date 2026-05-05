@@ -21,16 +21,16 @@ namespace AICombat
 
     void MageIdleState::Enter()
     {
-        
+
 
     }
 
     void MageIdleState::Update(float)
     {
-        if (MageStateMachine* tankStatMachine = dynamic_cast<MageStateMachine*>(m_stateMachine))
+        if (MageStateMachine* mageStatMachine = dynamic_cast<MageStateMachine*>(m_stateMachine))
         {
-            if (tankStatMachine->FindClosestTarget() != nullptr)
-                tankStatMachine->ChangeState(MageChaseState::Name);
+            if (mageStatMachine->FindClosestTarget() != nullptr)
+                mageStatMachine->ChangeState(MageChaseState::Name);
         }
     }
 
@@ -45,27 +45,27 @@ namespace AICombat
 
     void MageChaseState::Update(float _dt)
     {
-        MageStateMachine* tankStatMachine = dynamic_cast<MageStateMachine*>(m_stateMachine);
-        if (tankStatMachine == nullptr)
+        MageStateMachine* mageStatMachine = dynamic_cast<MageStateMachine*>(m_stateMachine);
+        if (mageStatMachine == nullptr)
             return;
 
-        Canis::Entity* target = tankStatMachine->FindClosestTarget();
+        Canis::Entity* target = mageStatMachine->FindClosestTarget();
 
         if (target == nullptr)
         {
-            tankStatMachine->ChangeState(MageIdleState::Name);
+            mageStatMachine->ChangeState(MageIdleState::Name);
             return;
         }
 
-        tankStatMachine->FaceTarget(*target);
+        mageStatMachine->FaceTarget(*target);
 
-        if (tankStatMachine->DistanceTo(*target) <= tankStatMachine->GetAttackRange())
+        if (mageStatMachine->DistanceTo(*target) <= mageStatMachine->GetAttackRange())
         {
-            tankStatMachine->ChangeState(MageAttackState::Name);
+            mageStatMachine->ChangeState(MageAttackState::Name);
             return;
         }
 
-        tankStatMachine->MoveTowards(*target, moveSpeed, _dt);
+        mageStatMachine->MoveTowards(*target, moveSpeed, _dt);
     }
 
     MageAttackState::MageAttackState(SuperPupUtilities::StateMachine& _stateMachine) :
@@ -73,28 +73,44 @@ namespace AICombat
 
     void MageAttackState::Enter()
     {
-        
+        MageStateMachine* mageStatMachine = dynamic_cast<MageStateMachine*>(m_stateMachine);
+
+        // mageStatMachine->StartStaffGlow();
     }
 
-    void MageAttackState::Update(float)
+    void MageAttackState::Update(float _dt)
     {
-        MageStateMachine* tankStatMachine = dynamic_cast<MageStateMachine*>(m_stateMachine);
-        if (tankStatMachine == nullptr)
+        MageStateMachine* mageStatMachine = dynamic_cast<MageStateMachine*>(m_stateMachine);
+        if (mageStatMachine == nullptr)
             return;
 
-        if (Canis::Entity* target = tankStatMachine->FindClosestTarget())
-            tankStatMachine->FaceTarget(*target);
+        if (Canis::Entity* target = mageStatMachine->FindClosestTarget())
+            mageStatMachine->FaceTarget(*target);
 
         const float duration = std::max(attackDuration, 0.001f);
-        // tankStatMachine->SetHammerSwing(tankStatMachine->GetStateTime() / duration);
 
-        if (tankStatMachine->GetStateTime() < duration)
+        // MAGE SPECIFIC LOGIC
+
+        attackStartTimer += _dt;
+
+        mageStatMachine->staffVisual->GetComponent<PointLight>().intensity += (_dt * 2.0f);
+
+        if(attackStartTimer >= mageStatMachine->attackStartDelay)
+        {
+            mageStatMachine->ShootEm();
+        }
+
+        // END MAGE SPECIFIC
+
+        // mageStatMachine->SetHammerSwing(mageStatMachine->GetStateTime() / duration);
+
+        if (mageStatMachine->GetStateTime() < duration)
             return;
 
-        if (tankStatMachine->FindClosestTarget() != nullptr)
-            tankStatMachine->ChangeState(MageChaseState::Name);
+        if (mageStatMachine->FindClosestTarget() != nullptr)
+            mageStatMachine->ChangeState(MageChaseState::Name);
         else
-            tankStatMachine->ChangeState(MageIdleState::Name);
+            mageStatMachine->ChangeState(MageIdleState::Name);
     }
 
     void MageAttackState::Exit()
@@ -119,8 +135,6 @@ namespace AICombat
         REGISTER_PROPERTY(mageStateMachine, AICombat::MageStateMachine, detectionRange);
         REGISTER_PROPERTY(mageStateMachine, AICombat::MageStateMachine, bodyColliderSize);
         RegisterAccessorProperty(mageStateMachine, AICombat::MageStateMachine, chaseState, moveSpeed);
-        RegisterAccessorProperty(mageStateMachine, AICombat::MageStateMachine, mageAttackState, hammerRestDegrees);
-        RegisterAccessorProperty(mageStateMachine, AICombat::MageStateMachine, mageAttackState, hammerSwingDegrees);
         RegisterAccessorProperty(mageStateMachine, AICombat::MageStateMachine, mageAttackState, attackRange);
         RegisterAccessorProperty(mageStateMachine, AICombat::MageStateMachine, mageAttackState, attackDuration);
         RegisterAccessorProperty(mageStateMachine, AICombat::MageStateMachine, mageAttackState, attackDamageTime);
@@ -130,7 +144,9 @@ namespace AICombat
         REGISTER_PROPERTY(mageStateMachine, AICombat::MageStateMachine, hitSfxPath1);
         REGISTER_PROPERTY(mageStateMachine, AICombat::MageStateMachine, hitSfxPath2);
         REGISTER_PROPERTY(mageStateMachine, AICombat::MageStateMachine, hitSfxVolume);
+        REGISTER_PROPERTY(mageStateMachine, AICombat::MageStateMachine, attackStartDelay);
         REGISTER_PROPERTY(mageStateMachine, AICombat::MageStateMachine, deathEffectPrefab);
+        REGISTER_PROPERTY(mageStateMachine, AICombat::MageStateMachine, bulletPrefab);
 
         DEFAULT_CONFIG_AND_REQUIRED(
             mageStateMachine,
@@ -327,6 +343,16 @@ namespace AICombat
     int MageStateMachine::GetCurrentHealth() const
     {
         return m_currentHealth;
+    }
+
+    void MageStateMachine::StartStaffGlow() 
+    {
+        staffVisual->GetComponent<PointLight>().intensity = 1.0f;
+    }
+
+    void MageStateMachine::ShootEm() 
+    {
+        
     }
 
     void MageStateMachine::TakeDamage(int _damage)

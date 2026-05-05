@@ -94,7 +94,7 @@ namespace AICombat
 
         attackStartTimer += _dt;
 
-        mageStatMachine->staffVisual->GetComponent<PointLight>().intensity += (_dt * 2.0f);
+        mageStatMachine->staffVisual->GetComponent<PointLight>().intensity += (_dt * 10.0f); // 0.5 * 10 = intensity 5
 
         if(attackStartTimer >= mageStatMachine->attackStartDelay)
         {
@@ -106,8 +106,6 @@ namespace AICombat
         }
 
         // END MAGE SPECIFIC
-
-        // mageStatMachine->SetHammerSwing(mageStatMachine->GetStateTime() / duration);
 
         if (mageStatMachine->GetStateTime() < duration)
             return;
@@ -400,12 +398,12 @@ namespace AICombat
         if (!IsAlive())
             return;
 
-        const int damageToApply = std::max(_damage, 0);
-        if (damageToApply <= 0)
-            return;
+        const int damageToApply = _damage; // Allow negative damage for healing
 
-        m_currentHealth = std::max(0, m_currentHealth - damageToApply);
-        PlayHitSfx();
+        if (damageToApply > 0)
+            PlayHitSfx();
+
+        m_currentHealth = std::clamp(m_currentHealth - damageToApply, 0, maxHealth);
 
         if (m_hasBaseColor && entity.HasComponent<Canis::Material>())
         {

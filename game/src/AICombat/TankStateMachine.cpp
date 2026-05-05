@@ -358,8 +358,6 @@ namespace AICombat
             return;
 
         const int damageToApply = std::max(_damage, 0);
-        if (damageToApply <= 0)
-            return;
 
         m_currentHealth = std::max(0, m_currentHealth - damageToApply);
         PlayHitSfx();

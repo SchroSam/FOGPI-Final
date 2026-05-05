@@ -129,8 +129,8 @@ Entities:
     Tag: Blue
     Canis::Transform:
       active: true
-      position: [-4, 1, 0]
-      rotation: [0, 0, 0]
+      position: [-4.5038013, 1, -0.34812403]
+      rotation: [0, -0, 0]
       scale: [1, 1, 1]
       parent: 0
       children:
@@ -205,7 +205,7 @@ Entities:
       ModelAsset:
         uuid: 17154083321347000101
   - Entity: 920110
-    Name: Red Brawler
+    Name: Red Tank
     Tag: Red
     Canis::Transform:
       active: true
@@ -386,7 +386,7 @@ Entities:
       active: true
       size: [1, 1, 1]
     Canis::Material:
-      color: [1, 1, 1, 1]
+      color: [0.1891892, 0.1891892, 0.1891892, 1]
       MaterialAsset:
         uuid: 17490362529814420531
     Canis::Model:
@@ -398,3 +398,140 @@ Entities:
       sensorSize: [1, 1, 1]
       damage: 10
       targetTag: Blue
+  - Entity: 5218509262529328616
+    Name: Blue Mage
+    Tag: Blue
+    Canis::Transform:
+      active: true
+      position: [-4.383645, 1.0001156, 5.47992]
+      rotation: [0, -0.0987526, 0]
+      scale: [0.9999956, 1, 0.9999956]
+      parent: 0
+      children:
+        - 15882665552837415823
+    Canis::Rigidbody:
+      active: true
+      motionType: 1
+      mass: 1
+      friction: 0.2
+      restitution: 0
+      linearDamping: 0.05
+      angularDamping: 0.05
+      useGravity: false
+      isSensor: false
+      layer: 1
+      mask: 21
+      allowSleeping: false
+      lockRotationX: false
+      lockRotationY: false
+      lockRotationZ: false
+      linearVelocity: [0, 0, 0]
+      angularVelocity: [0, 0, 0]
+    Canis::BoxCollider:
+      active: true
+      size: [1, 1, 1]
+    Canis::Material:
+      color: [0.24, 0.58, 0.98, 1]
+      MaterialAsset:
+        uuid: 17490362529814420531
+    Canis::Model:
+      color: [0.24, 0.58, 0.98, 1]
+      ModelAsset:
+        uuid: 17154083321347000101
+    AICombat::MageStateMachine:
+      targetTag: Red
+      detectionRange: 20
+      bodyColliderSize: [1, 1, 1]
+      moveSpeed: 2
+      hammerRestDegrees: 140
+      hammerSwingDegrees: -120
+      attackRange: 2.25
+      attackDuration: 1.5
+      attackDamageTime: 0.25
+      maxHealth: 40
+      logStateChanges: true
+      staffVisual: 8532050747544124908
+      hitSfxPath1:
+        uuid: 9101673412543458587
+        path: assets/audio/sfx/hit_1.ogg
+      hitSfxPath2:
+        uuid: 15814014518013310489
+        path: assets/audio/sfx/hit_2.ogg
+      hitSfxVolume: 1
+      deathEffectPrefab: 1932126691914227009
+  - Entity: 15882665552837415823
+    Name: Right Hand Root
+    Tag: ""
+    Canis::Transform:
+      active: true
+      position: [0.7310178, 0.18722522, 0]
+      rotation: [1.5707964, -0, 0]
+      scale: [1, 1, 1]
+      parent: 5218509262529328616
+      children:
+        - 4675233186412311603
+        - 8532050747544124908
+  - Entity: 4675233186412311603
+    Name: Blue Staff Handle
+    Tag: ""
+    Canis::Transform:
+      active: true
+      position: [0, 0, -0.48331738]
+      rotation: [0, -0, 0]
+      scale: [0.24999192, 0.24999996, 1.1000001]
+      parent: 15882665552837415823
+      children:
+        []
+    Canis::Material:
+      color: [0.78, 0.9, 1, 1]
+      MaterialAsset:
+        uuid: 17490362529814420531
+    Canis::Model:
+      color: [0.78, 0.9, 1, 1]
+      ModelAsset:
+        uuid: 17154083321347000101
+  - Entity: 8532050747544124908
+    Name: Blue Staff Head
+    Tag: ""
+    Canis::Transform:
+      active: true
+      position: [0, -5.004921e-08, -1.1449975]
+      rotation: [0, 0, -3.2887491e-16]
+      scale: [0.3799808, 0.37979093, 0.3802069]
+      parent: 15882665552837415823
+      children:
+        []
+    Canis::Rigidbody:
+      active: true
+      motionType: 0
+      mass: 1
+      friction: 0.2
+      restitution: 0
+      linearDamping: 0.05
+      angularDamping: 0.05
+      useGravity: false
+      isSensor: true
+      layer: 1
+      mask: 1
+      allowSleeping: false
+      lockRotationX: false
+      lockRotationY: false
+      lockRotationZ: false
+      linearVelocity: [0, 0, 0]
+      angularVelocity: [0, 0, 0]
+    Canis::BoxCollider:
+      active: true
+      size: [1, 1, 1]
+    Canis::Material:
+      color: [1, 0.23166025, 0, 1]
+      MaterialAsset:
+        uuid: 17490362529814420531
+    Canis::Model:
+      color: [1, 1, 1, 1]
+      ModelAsset:
+        uuid: 17154083321347000101
+    AICombat::HammerDamage:
+      owner: 0
+      sensorSize: [1, 1, 1]
+      damage: 10
+      targetTag: Red

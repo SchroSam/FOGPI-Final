@@ -32,7 +32,7 @@ namespace AICombat
         void Update(float _dt) override;
 
     private:
-        float m_timeRemaining = 0.0f;
+        float m_timeRemaining = 2.0f;
 
         void Move(float _dt);
         void CollisionCheck(const Canis::Vector3& _start, const Canis::Vector3& _end);

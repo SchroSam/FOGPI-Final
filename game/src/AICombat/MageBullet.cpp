@@ -1,7 +1,9 @@
 #include <AICombat/MageBullet.hpp>
 
+#include <AICombat/Fighter.hpp>
 #include <Canis/App.hpp>
 #include <Canis/ConfigHelper.hpp>
+#include <Canis/Debug.hpp>
 
 namespace AICombat
 {
@@ -46,9 +48,22 @@ namespace AICombat
         if (hit.entity == nullptr || hit.entity == &entity)
             return;
 
+        if(hit.entity != nullptr)
+            Canis::Debug::Log("%s", hit.entity->name);
+
         if (IsValidTarget(*hit.entity) && hit.entity->HasComponent<Canis::Rigidbody>())
         {
             //DAMAGE
+            Fighter* targetStateMachine = hit.entity->GetScript<Fighter>();
+            
+            // if (targetStateMachine == nullptr || !targetStateMachine->IsAlive())
+            //     continue;
+
+            // if (other->tag != targetTag)
+            //     continue;
+
+            Canis::Debug::Log("%s made a hit", entity.name);
+            targetStateMachine->TakeDamage(damage);
             entity.Destroy();
         }
 
@@ -69,16 +84,17 @@ namespace AICombat
 
     void MageBullet::Create() {}
 
-    void MageBullet::Ready() 
-    {
-        m_timeRemaining = 5.0f;
-    }
+    void MageBullet::Ready() {}
 
     void MageBullet::Destroy() {}
 
     void MageBullet::Update(float _dt) 
     {
         Move(_dt);
+
+        const Canis::Vector3 start = entity.GetComponent<Transform>().GetGlobalPosition();
+
+        CollisionCheck(start, start + entity.GetComponent<Transform>().GetForward());
 
         m_timeRemaining -= _dt;
 

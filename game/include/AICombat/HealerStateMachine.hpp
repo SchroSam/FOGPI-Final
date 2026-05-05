@@ -11,48 +11,49 @@ namespace Canis
 
 namespace AICombat
 {
-    class MageStateMachine;
+    class HealerStateMachine;
 
-    class MageIdleState : public SuperPupUtilities::State
+    class HealerIdleState : public SuperPupUtilities::State
     {
     public:
         static constexpr const char* Name = "IdleState";
 
-        explicit MageIdleState(SuperPupUtilities::StateMachine& _stateMachine);
+        explicit HealerIdleState(SuperPupUtilities::StateMachine& _stateMachine);
         void Enter() override;
         void Update(float _dt) override;
     };
 
-    class MageChaseState : public SuperPupUtilities::State
+    class HealerChaseState : public SuperPupUtilities::State
     {
     public:
         static constexpr const char* Name = "ChaseState";
         float moveSpeed = 3.0f;
 
-        explicit MageChaseState(SuperPupUtilities::StateMachine& _stateMachine);
+        explicit HealerChaseState(SuperPupUtilities::StateMachine& _stateMachine);
         void Enter() override;
         void Update(float _dt) override;
     };
 
-    class MageAttackState : public SuperPupUtilities::State
+    class HealerHealState : public SuperPupUtilities::State
     {
     public:
-        static constexpr const char* Name = "MageAttackState";
-        float attackRange = 15.0f;
+        static constexpr const char* Name = "HealerHealState";
+        float attackRange = 10.0f;
         float attackDuration = 1.5f;
         float attackDamageTime = 0.25f;
-        float attackStartTimer = 0.5f;
+        float healStartTimer = 0.5f;
+        int healAmount = 2;
 
-        explicit MageAttackState(SuperPupUtilities::StateMachine& _stateMachine);
+        explicit HealerHealState(SuperPupUtilities::StateMachine& _stateMachine);
         void Enter() override;
         void Update(float _dt) override;
         void Exit() override;
     };
 
-    class MageStateMachine : public Fighter
+    class HealerStateMachine : public Fighter
     {
     public:
-        static constexpr const char* ScriptName = "AICombat::MageStateMachine";
+        static constexpr const char* ScriptName = "AICombat::HealerStateMachine";
 
         Canis::Entity* staffVisual = nullptr;
         Canis::AudioAssetHandle hitSfxPath1 = { .path = "assets/audio/sfx/hit_1.ogg" };
@@ -62,11 +63,11 @@ namespace AICombat
         Canis::SceneAssetHandle deathEffectPrefab = { .path = "assets/prefabs/brawler_death_particles.scene" };
         Canis::SceneAssetHandle bulletPrefab;
 
-        explicit MageStateMachine(Canis::Entity& _entity);
+        explicit HealerStateMachine(Canis::Entity& _entity);
 
-        MageIdleState idleState;
-        MageChaseState chaseState;
-        MageAttackState mageAttackState;
+        HealerIdleState idleState;
+        HealerChaseState chaseState;
+        HealerHealState healerHealState;
 
         void Create() override;
         void Ready() override;
@@ -85,7 +86,8 @@ namespace AICombat
         std::string_view GetAttackStateName() const override;
         float GetAttackDamageTime() const override;
 
-        void ShootEm();
+        void StartStaffGlow();
+        // void ShootEm();
         // void SetHammerSwing(float _normalized);
 
         void TakeDamage(int _damage) override;
@@ -96,6 +98,6 @@ namespace AICombat
         void SpawnDeathEffect() override;
     };
 
-    void RegisterMageStateMachineScript(Canis::App& _app);
-    void UnRegisterMageStateMachineScript(Canis::App& _app);
+    void RegisterHealerStateMachineScript(Canis::App& _app);
+    void UnRegisterHealerStateMachineScript(Canis::App& _app);
 }

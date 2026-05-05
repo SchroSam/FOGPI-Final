@@ -443,8 +443,6 @@ Entities:
       detectionRange: 20
       bodyColliderSize: [1, 1, 1]
       moveSpeed: 2
-      hammerRestDegrees: 140
-      hammerSwingDegrees: -120
       attackRange: 2.25
       attackDuration: 1.5
       attackDamageTime: 0.25
@@ -458,7 +456,9 @@ Entities:
         uuid: 15814014518013310489
         path: assets/audio/sfx/hit_2.ogg
       hitSfxVolume: 1
+      attackStartDelay: 0.5
       deathEffectPrefab: 1932126691914227009
+      bulletPrefab: 15859375282125958522
   - Entity: 15882665552837415823
     Name: Right Hand Root
     Tag: ""
@@ -522,6 +522,11 @@ Entities:
     Canis::BoxCollider:
       active: true
       size: [1, 1, 1]
+    Canis::PointLight:
+      enabled: true
+      color: [1, 0.23137255, 0, 1]
+      intensity: 0
+      range: 12
     Canis::Material:
       color: [1, 0.23166025, 0, 1]
       MaterialAsset:
@@ -530,8 +535,3 @@ Entities:
       color: [1, 1, 1, 1]
       ModelAsset:
         uuid: 17154083321347000101
-    AICombat::HammerDamage:
-      owner: 0
-      sensorSize: [1, 1, 1]
-      damage: 10
-      targetTag: Red

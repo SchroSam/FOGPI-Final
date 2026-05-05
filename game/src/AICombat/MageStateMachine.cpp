@@ -4,6 +4,7 @@
 #include <Canis/AudioManager.hpp>
 #include <Canis/ConfigHelper.hpp>
 #include <Canis/Debug.hpp>
+#include <AICombat/MageBullet.hpp>
 
 #include <algorithm>
 #include <cmath>
@@ -98,6 +99,10 @@ namespace AICombat
         if(attackStartTimer >= mageStatMachine->attackStartDelay)
         {
             mageStatMachine->ShootEm();
+
+            // reset back to nothing;
+            attackStartTimer = 0.0f;
+            mageStatMachine->staffVisual->GetComponent<PointLight>().intensity = 0.0f;
         }
 
         // END MAGE SPECIFIC
@@ -115,7 +120,11 @@ namespace AICombat
 
     void MageAttackState::Exit()
     {
-        
+        MageStateMachine* mageStatMachine = dynamic_cast<MageStateMachine*>(m_stateMachine);
+
+        attackStartTimer = 0.0f;
+        mageStatMachine->staffVisual->GetComponent<PointLight>().intensity = 0.0f;
+
     }
 
     MageStateMachine::MageStateMachine(Canis::Entity& _entity) :
@@ -191,6 +200,11 @@ namespace AICombat
             m_baseColor = entity.GetComponent<Canis::Material>().color;
             m_hasBaseColor = true;
         }
+
+        // if(entity.tag == "Blue")
+        //     bulletPrefab = {.path = "assets/prefabs/mage_bullet_blue.scene"};
+        // else
+        //     bulletPrefab = {.path = "assets/prefabs/mage_bullet_red.scene"};
 
         m_currentHealth = std::max(maxHealth, 1);
         m_stateTime = 0.0f;
@@ -352,7 +366,29 @@ namespace AICombat
 
     void MageStateMachine::ShootEm() 
     {
-        
+        if (bulletPrefab.Empty() || !entity.HasComponent<Canis::Transform>())
+            return;
+
+        const Canis::Transform& sourceTransform = staffVisual->GetComponent<Canis::Transform>();
+        const Canis::Vector3 spawnPosition = sourceTransform.GetGlobalPosition();
+        const Canis::Vector3 spawnRotation = sourceTransform.GetGlobalRotation();
+
+        for (Canis::Entity* spawnedEntity : entity.scene.Instantiate(bulletPrefab))
+        {
+            if (spawnedEntity == nullptr || !spawnedEntity->HasComponent<Canis::Transform>())
+                continue;
+
+            Canis::Transform& spawnedTransform = spawnedEntity->GetComponent<Canis::Transform>();
+            spawnedTransform.position = spawnPosition;
+            spawnedTransform.rotation = spawnRotation;
+
+            // give bullet team affiliation
+            // if(entity.tag == "Blue")
+            //     spawnedEntity->GetComponent<MageBullet>().targetTag = "Red";
+            // else
+            //     spawnedEntity->GetComponent<MageBullet>().targetTag = "Blue";
+            //spawnedEntity->GetComponent<MageBullet>().targetTag = entity.tag == "Blue" ? "Red" : "Blue";
+        }
     }
 
     void MageStateMachine::TakeDamage(int _damage)

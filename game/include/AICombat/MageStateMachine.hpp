@@ -39,7 +39,7 @@ namespace AICombat
     {
     public:
         static constexpr const char* Name = "MageAttackState";
-        float attackRange = 6.0f;
+        float attackRange = 15.0f;
         float attackDuration = 1.5f;
         float attackDamageTime = 0.25f;
         float attackStartTimer = 0.5f;
@@ -61,7 +61,7 @@ namespace AICombat
         float hitSfxVolume = 1.0f;
         float attackStartDelay = 0.5f;
         Canis::SceneAssetHandle deathEffectPrefab = { .path = "assets/prefabs/brawler_death_particles.scene" };
-        Canis::SceneAssetHandle bulletPrefab = {.path = "assets/prefabs/laser_tag_bullet.scene"};
+        Canis::SceneAssetHandle bulletPrefab;
 
         explicit MageStateMachine(Canis::Entity& _entity);
 

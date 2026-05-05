@@ -136,6 +136,7 @@ namespace AICombat
             {
                 healTimer = 0.0f;
                 fighter->m_currentHealth += healAmount;
+                Canis::AudioManager::PlaySFX(healerStatMachine->healSfx, std::clamp(0.5f, 0.0f, 1.0f));
                 Canis::Debug::Log("I healed him chief: %d", fighter->m_currentHealth);
             }
         }

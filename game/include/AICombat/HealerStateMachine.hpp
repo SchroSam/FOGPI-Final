@@ -60,6 +60,7 @@ namespace AICombat
         Canis::Entity* staffVisual = nullptr;
         Canis::AudioAssetHandle hitSfxPath1 = { .path = "assets/audio/sfx/hit_1.ogg" };
         Canis::AudioAssetHandle hitSfxPath2 = { .path = "assets/audio/sfx/hit_2.ogg" };
+        Canis::AudioAssetHandle healSfx = { .path = "assets/audio/sfx/healing.ogg" };
         float hitSfxVolume = 1.0f;
         float healStartDelay = 0.5f;
         Canis::SceneAssetHandle deathEffectPrefab = { .path = "assets/prefabs/brawler_death_particles.scene" };

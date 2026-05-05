@@ -134,6 +134,36 @@ namespace AICombat
             mageStatMachine->staffVisual->GetComponent<PointLight>().intensity = 0.0f;
     }
 
+    void MageStateMachine::ShootEm() // ChootEm! ChootEm!
+    {
+
+        if (bulletPrefab.Empty() || !entity.HasComponent<Canis::Transform>())
+            return;
+
+        const Canis::Transform& sourceTransform = entity.GetComponent<Canis::Transform>();
+        const Canis::Vector3 spawnPosition = sourceTransform.GetGlobalPosition();
+        const Canis::Vector3 spawnRotation = sourceTransform.GetGlobalRotation();
+
+        for (Canis::Entity* spawnedEntity : entity.scene.Instantiate(bulletPrefab))
+        {
+            if (spawnedEntity == nullptr || !spawnedEntity->HasComponent<Canis::Transform>())
+                continue;
+
+            Canis::Transform& spawnedTransform = spawnedEntity->GetComponent<Canis::Transform>();
+            spawnedTransform.position = spawnPosition;
+            spawnedTransform.rotation = spawnRotation;
+
+            // give bullet team affiliation
+            // if(entity.tag == "Blue")
+            //     spawnedEntity->GetComponent<MageBullet>().targetTag = "Red";
+            // else
+            //     spawnedEntity->GetComponent<MageBullet>().targetTag = "Blue";
+            //spawnedEntity->GetComponent<MageBullet>().targetTag = entity.tag == "Blue" ? "Red" : "Blue";
+        }
+
+        Canis::AudioManager::PlaySFX(magicSfx, std::clamp(0.5f, 0.0f, 1.0f));
+    }
+
     MageStateMachine::MageStateMachine(Canis::Entity& _entity) :
         Fighter(_entity),
         idleState(*this),
@@ -364,33 +394,6 @@ namespace AICombat
     int MageStateMachine::GetCurrentHealth() const
     {
         return m_currentHealth;
-    }
-
-    void MageStateMachine::ShootEm() // ChootEm! ChootEm!
-    {
-        if (bulletPrefab.Empty() || !entity.HasComponent<Canis::Transform>())
-            return;
-
-        const Canis::Transform& sourceTransform = entity.GetComponent<Canis::Transform>();
-        const Canis::Vector3 spawnPosition = sourceTransform.GetGlobalPosition();
-        const Canis::Vector3 spawnRotation = sourceTransform.GetGlobalRotation();
-
-        for (Canis::Entity* spawnedEntity : entity.scene.Instantiate(bulletPrefab))
-        {
-            if (spawnedEntity == nullptr || !spawnedEntity->HasComponent<Canis::Transform>())
-                continue;
-
-            Canis::Transform& spawnedTransform = spawnedEntity->GetComponent<Canis::Transform>();
-            spawnedTransform.position = spawnPosition;
-            spawnedTransform.rotation = spawnRotation;
-
-            // give bullet team affiliation
-            // if(entity.tag == "Blue")
-            //     spawnedEntity->GetComponent<MageBullet>().targetTag = "Red";
-            // else
-            //     spawnedEntity->GetComponent<MageBullet>().targetTag = "Blue";
-            //spawnedEntity->GetComponent<MageBullet>().targetTag = entity.tag == "Blue" ? "Red" : "Blue";
-        }
     }
 
     void MageStateMachine::TakeDamage(int _damage)
